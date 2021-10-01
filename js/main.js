@@ -5,11 +5,9 @@ class ValidationError extends Error {
   }
 }
 
-function isPositiveOrZeroNumber(number) {
-  return number >= 0;
-}
+const isPositiveOrZeroNumber = (number) => number >= 0;
 
-function checkRangeNumbers(min, max) {
+const checkRangeNumbers = (min, max) => {
   if (!Number.isFinite(min)) {
     throw new ValidationError('minIsNotFinite');
   }
@@ -28,23 +26,23 @@ function checkRangeNumbers(min, max) {
   if (max === min) {
     throw new ValidationError('maxIsEqualToMin');
   }
-}
+};
 
-function checkFractionDigits(fractionDigits) {
+const checkFractionDigits = (fractionDigits) => {
   if (!Number.isFinite(fractionDigits)) {
     throw new ValidationError('fractionDigitsIsNotFinite');
   }
   if (!((fractionDigits >= 0) && (fractionDigits <= 100))) {
     throw new ValidationError('fractionDigitsInvalidRange');
   }
-}
+};
 
-function errorHandler(err) {
+const errorHandler = (err) => {
   //@todo тут будет какой-то обработчик
   err.message;
-}
+};
 
-function getRandomIntegerFromRange(min, max) {
+const getRandomIntegerFromRange = (min, max) => {
   try {
     checkRangeNumbers(min, max);
   } catch (err) {
@@ -58,10 +56,10 @@ function getRandomIntegerFromRange(min, max) {
 
   const randomNumber = min + Math.random() * (max + 1 - min);
   return Math.floor(randomNumber);
-}
+};
 getRandomIntegerFromRange(3, 15);
 
-function getRandomFloatFromRange(min, max, fractionDigits) {
+const getRandomFloatFromRange = (min, max, fractionDigits) => {
   try {
     checkFractionDigits(fractionDigits);
     checkRangeNumbers(min, max);
@@ -76,5 +74,5 @@ function getRandomFloatFromRange(min, max, fractionDigits) {
 
   const randomNumber = min + Math.random() * (max + 1 - min);
   return Number(randomNumber.toFixed(fractionDigits));
-}
+};
 getRandomFloatFromRange(4, 14, 7);
