@@ -39,11 +39,6 @@ const checkFractionDigits = (fractionDigits) => {
   }
 };
 
-const errorHandler = (err) => {
-  //@todo тут будет какой-то обработчик
-  err.message;
-};
-
 /**
  * @param {number} min
  * @param {number} max
@@ -72,22 +67,4 @@ const getRandomFloatFromRange = (min, max, fractionDigits) => {
   return Number(randomNumber.toFixed(fractionDigits));
 };
 
-try {
-  getRandomIntegerFromRange(3, 15);
-} catch (err) {
-  if (err instanceof ValidationError) {
-    errorHandler(err);
-  } else {
-    throw err;
-  }
-}
-
-try {
-  getRandomFloatFromRange(4, 14, 7);
-} catch (err) {
-  if (err instanceof ValidationError) {
-    errorHandler(err);
-  } else {
-    throw err;
-  }
-}
+export {getRandomIntegerFromRange, getRandomFloatFromRange, ValidationError};
