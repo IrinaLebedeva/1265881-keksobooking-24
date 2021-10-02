@@ -13,21 +13,26 @@ const ERRORS = {
   fractionDigitsInvalidRange: 'Количество знаков после запятой может быть в диапазоне от 0 до 100',
 };
 
+/**
+ * @param {number} min
+ * @param {number} max
+ * @throws ValidationError
+ */
 const checkRangeNumbers = (min, max) => {
-  if (min < 0) {
-    throw new ValidationError(ERRORS.minIsNotPositiveOrZeroNumber);
-  }
-  if (max < 0) {
-    throw new ValidationError(ERRORS.maxIsNotPositiveOrZeroNumber);
-  }
-  if (max < min) {
-    throw new ValidationError(ERRORS.maxSmallerThanMin);
-  }
-  if (max === min) {
-    throw new ValidationError(ERRORS.maxIsEqualToMin);
+  const error =
+    (min < 0 ? ERRORS.minIsNotPositiveOrZeroNumber : null) ||
+    (max < 0 ? ERRORS.maxIsNotPositiveOrZeroNumber : null) ||
+    (max < min ? ERRORS.maxSmallerThanMin : null) ||
+    (max === min ? ERRORS.maxIsEqualToMin : null);
+  if (error) {
+    throw new ValidationError(error);
   }
 };
 
+/**
+ * @param {number} fractionDigits
+ * @return ValidationError
+ */
 const checkFractionDigits = (fractionDigits) => {
   if (!((fractionDigits >= 0) && (fractionDigits <= 100))) {
     throw new ValidationError(ERRORS.fractionDigitsInvalidRange);
