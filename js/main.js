@@ -5,35 +5,32 @@ class ValidationError extends Error {
   }
 }
 
-const isPositiveOrZeroNumber = (number) => number >= 0;
+const ERRORS = {
+  minIsNotPositiveOrZeroNumber: 'Минимальное значение из диапазона не может быть меньше нуля',
+  maxIsNotPositiveOrZeroNumber: 'Максимальное значение из диапазона не может быть меньше нуля',
+  maxSmallerThanMin: 'Максимальное значение диапазона не может быть меньше минимального',
+  maxIsEqualToMin: 'Максимальное значение диапазона равно минимальному',
+  fractionDigitsInvalidRange: 'Количество знаков после запятой может быть в диапазоне от 0 до 100',
+};
 
 const checkRangeNumbers = (min, max) => {
-  if (!Number.isFinite(min)) {
-    throw new ValidationError('minIsNotFinite');
+  if (min < 0) {
+    throw new ValidationError(ERRORS.minIsNotPositiveOrZeroNumber);
   }
-  if (!Number.isFinite(max)) {
-    throw new ValidationError('maxIsNotFinite');
-  }
-  if (!isPositiveOrZeroNumber(min)) {
-    throw new ValidationError('minIsNotPositiveOrZeroNumber');
-  }
-  if (!isPositiveOrZeroNumber(max)) {
-    throw new ValidationError('maxIsNotPositiveOrZeroNumber');
+  if (max < 0) {
+    throw new ValidationError(ERRORS.maxIsNotPositiveOrZeroNumber);
   }
   if (max < min) {
-    throw new ValidationError('maxSmallerThanMin');
+    throw new ValidationError(ERRORS.maxSmallerThanMin);
   }
   if (max === min) {
-    throw new ValidationError('maxIsEqualToMin');
+    throw new ValidationError(ERRORS.maxIsEqualToMin);
   }
 };
 
 const checkFractionDigits = (fractionDigits) => {
-  if (!Number.isFinite(fractionDigits)) {
-    throw new ValidationError('fractionDigitsIsNotFinite');
-  }
   if (!((fractionDigits >= 0) && (fractionDigits <= 100))) {
-    throw new ValidationError('fractionDigitsInvalidRange');
+    throw new ValidationError(ERRORS.fractionDigitsInvalidRange);
   }
 };
 
@@ -42,37 +39,50 @@ const errorHandler = (err) => {
   err.message;
 };
 
+/**
+ * @param {number} min
+ * @param {number} max
+ * @returns {number}
+ * @throws ValidationError
+ */
 const getRandomIntegerFromRange = (min, max) => {
-  try {
-    checkRangeNumbers(min, max);
-  } catch (err) {
-    if (err instanceof ValidationError) {
-      errorHandler(err);
-      return false;
-    } else {
-      throw err;
-    }
-  }
+  checkRangeNumbers(min, max);
 
   const randomNumber = min + Math.random() * (max + 1 - min);
   return Math.floor(randomNumber);
 };
-getRandomIntegerFromRange(3, 15);
 
+/**
+ * @param {number} min
+ * @param {number} max
+ * @param {number} fractionDigits
+ * @returns {number}
+ * @throws ValidationError
+ */
 const getRandomFloatFromRange = (min, max, fractionDigits) => {
-  try {
-    checkFractionDigits(fractionDigits);
-    checkRangeNumbers(min, max);
-  } catch (err) {
-    if (err instanceof ValidationError) {
-      errorHandler(err);
-      return false;
-    } else {
-      throw err;
-    }
-  }
+  checkFractionDigits(fractionDigits);
+  checkRangeNumbers(min, max);
 
   const randomNumber = min + Math.random() * (max + 1 - min);
   return Number(randomNumber.toFixed(fractionDigits));
 };
-getRandomFloatFromRange(4, 14, 7);
+
+try {
+  getRandomIntegerFromRange(3, 15);
+} catch (err) {
+  if (err instanceof ValidationError) {
+    errorHandler(err);
+  } else {
+    throw err;
+  }
+}
+
+try {
+  getRandomFloatFromRange(4, 14, 7);
+} catch (err) {
+  if (err instanceof ValidationError) {
+    errorHandler(err);
+  } else {
+    throw err;
+  }
+}
