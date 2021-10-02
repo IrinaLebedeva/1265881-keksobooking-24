@@ -9,10 +9,10 @@ const LAT_FROM_VALUE = 35.65000;
 const LAT_TO_VALUE = 35.70000;
 const LNG_FROM_VALUE = 139.70000;
 const LNG_TO_VALUE = 139.80000;
-const LOCATION_FRACTION_DIGITS = 5;
+const LOCATION_FRACTION_DIGITS_COUNT = 5;
 const TEMPLATE_AVATAR_URL = 'img/avatars/user{{xx}}.png';
-const DATA_TITLE_DESCRIPTION = ['beautiful', 'comfortable', 'cool', 'wonderful', 'perfect'];
 const TEMPLATE_DESCRIPTION = '{{title}} with {{features}}';
+const DATA_TITLE_DESCRIPTION = ['beautiful', 'comfortable', 'cool', 'wonderful', 'perfect'];
 const DATA_TYPE = ['palace', 'flat', 'house', 'bungalow', 'hotel'];
 const DATA_CHECKIN_CHECKOUT = ['12:00', '13:00', '14:00'];
 const DATA_FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
@@ -51,8 +51,8 @@ const advertCard = (advertId) => {
   const type = getType();
   const title = getTitle(type);
   const features = getRandomArray(DATA_FEATURES);
-  const lat = getRandomFloatFromRange(LAT_FROM_VALUE, LAT_TO_VALUE, LOCATION_FRACTION_DIGITS);
-  const lng = getRandomFloatFromRange(LNG_FROM_VALUE, LNG_TO_VALUE, LOCATION_FRACTION_DIGITS);
+  const lat = getRandomFloatFromRange(LAT_FROM_VALUE, LAT_TO_VALUE, LOCATION_FRACTION_DIGITS_COUNT);
+  const lng = getRandomFloatFromRange(LNG_FROM_VALUE, LNG_TO_VALUE, LOCATION_FRACTION_DIGITS_COUNT);
 
   return {
     author: {
