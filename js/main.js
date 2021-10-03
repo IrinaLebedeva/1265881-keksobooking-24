@@ -1,9 +1,9 @@
 import {getRandomIntegerFromRange, getRandomFloatFromRange} from './utils/get-random-number.js';
 
 const ADVERTS_COUNT = 10;
-const MAX_ROOMS_COUNT = 7;
-const MIN_PRICE_VALUE = 500;
-const MAX_PRICE_VALUE = 100000;
+const ROOMS_MAX_COUNT = 7;
+const PRICE_MIN_VALUE = 500;
+const PRICE_MAX_VALUE = 100000;
 const MAX_GUESTS_COUNT = 10;
 const LAT_FROM_VALUE = 35.65000;
 const LAT_TO_VALUE = 35.70000;
@@ -32,12 +32,11 @@ String.prototype.capitalize = function() {
 };
 
 const getAvatar = (advertId) => {
-  const avatarUrl = TEMPLATE_AVATAR_URL;
   const getAvatarId = (currentAdvertId) => currentAdvertId < 10 ? (`0${currentAdvertId}`) : currentAdvertId;
-  return avatarUrl.replace('{{xx}}', getAvatarId(advertId));
+  return TEMPLATE_AVATAR_URL.replace('{{xx}}', getAvatarId(advertId));
 };
 
-const getType = () => DATA_TYPE[getRandomIntegerFromRange(0, DATA_TYPE.length - 1)];
+const getRandomElementFromArray = (dataArr) => dataArr[getRandomIntegerFromRange(0, dataArr.length - 1)];
 
 const getRandomArray = (dataArr) => (dataArr.length > 1) ?
   dataArr.mixArr().slice(0, getRandomIntegerFromRange(1, dataArr.length)) : dataArr;
@@ -45,10 +44,10 @@ const getRandomArray = (dataArr) => (dataArr.length > 1) ?
 const getTitle = (type) => `${DATA_TITLE_DESCRIPTION[getRandomIntegerFromRange(0, DATA_TITLE_DESCRIPTION.length - 1)]} ${type}`.capitalize();
 
 const getDescription = (title, features) =>
-  TEMPLATE_DESCRIPTION.replace('{{title}}', title).replace('{{features}}', getRandomArray(features).join(', '));
+  TEMPLATE_DESCRIPTION.replace('{{title}}', title).replace('{{features}}', features.reverse().join(', '));
 
 const advertCard = (advertId) => {
-  const type = getType();
+  const type = getRandomElementFromArray(DATA_TYPE);
   const title = getTitle(type);
   const features = getRandomArray(DATA_FEATURES);
   const lat = getRandomFloatFromRange(LAT_FROM_VALUE, LAT_TO_VALUE, LOCATION_FRACTION_DIGITS_COUNT);
@@ -61,12 +60,12 @@ const advertCard = (advertId) => {
     offer: {
       title: title,
       address: `${lat}, ${lng}`,
-      price: getRandomIntegerFromRange(MIN_PRICE_VALUE, MAX_PRICE_VALUE),
+      price: getRandomIntegerFromRange(PRICE_MIN_VALUE, PRICE_MAX_VALUE),
       type: type,
-      rooms: getRandomIntegerFromRange(1, MAX_ROOMS_COUNT),
+      rooms: getRandomIntegerFromRange(1, ROOMS_MAX_COUNT),
       guests: getRandomIntegerFromRange(1, MAX_GUESTS_COUNT),
-      checkin: DATA_CHECKIN_CHECKOUT[getRandomIntegerFromRange(0, DATA_CHECKIN_CHECKOUT.length - 1)],
-      checkout: DATA_CHECKIN_CHECKOUT[getRandomIntegerFromRange(0, DATA_CHECKIN_CHECKOUT.length - 1)],
+      checkin: getRandomElementFromArray(DATA_CHECKIN_CHECKOUT),
+      checkout: getRandomElementFromArray(DATA_CHECKIN_CHECKOUT),
       features: features,
       description: getDescription(title, features),
       photos: getRandomArray(DATA_PHOTOS),
