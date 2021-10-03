@@ -12,11 +12,11 @@ const LNG_TO_VALUE = 139.80000;
 const LOCATION_FRACTION_DIGITS_COUNT = 5;
 const TEMPLATE_AVATAR_URL = 'img/avatars/user{{xx}}.png';
 const TEMPLATE_DESCRIPTION = '{{title}} with {{features}}';
-const DATA_TITLE_DESCRIPTION = ['beautiful', 'comfortable', 'cool', 'wonderful', 'perfect'];
-const DATA_TYPE = ['palace', 'flat', 'house', 'bungalow', 'hotel'];
-const DATA_CHECKIN_CHECKOUT = ['12:00', '13:00', '14:00'];
-const DATA_FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
-const DATA_PHOTOS = [
+const DESCRIPTIONS = ['beautiful', 'comfortable', 'cool', 'wonderful', 'perfect'];
+const TYPES = ['palace', 'flat', 'house', 'bungalow', 'hotel'];
+const CHECKIN_CHECKOUT_VALUES = ['12:00', '13:00', '14:00'];
+const FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
+const PHOTOS = [
   'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/duonguyen-8LrGtIxxa4w.jpg',
   'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/brandon-hoogenboom-SNxQGWxZQi0.jpg',
   'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/claire-rendall-b6kAwr1i0Iw.jpg',
@@ -32,7 +32,7 @@ String.prototype.capitalize = function() {
 };
 
 const getAvatar = (advertId) => {
-  const getAvatarId = (currentAdvertId) => currentAdvertId < 10 ? (`0${currentAdvertId}`) : currentAdvertId;
+  const getAvatarId = (currentAdvertId) => currentAdvertId < 10 ? `0${currentAdvertId}` : currentAdvertId;
   return TEMPLATE_AVATAR_URL.replace('{{xx}}', getAvatarId(advertId));
 };
 
@@ -41,15 +41,15 @@ const getRandomElementFromArray = (dataArr) => dataArr[getRandomIntegerFromRange
 const getRandomArray = (dataArr) => (dataArr.length > 1) ?
   dataArr.mixArr().slice(0, getRandomIntegerFromRange(1, dataArr.length)) : dataArr;
 
-const getTitle = (type) => `${DATA_TITLE_DESCRIPTION[getRandomIntegerFromRange(0, DATA_TITLE_DESCRIPTION.length - 1)]} ${type}`.capitalize();
+const getTitle = (type) => `${DESCRIPTIONS[getRandomIntegerFromRange(0, DESCRIPTIONS.length - 1)]} ${type}`.capitalize();
 
 const getDescription = (title, features) =>
   TEMPLATE_DESCRIPTION.replace('{{title}}', title).replace('{{features}}', features.reverse().join(', '));
 
 const advertCard = (advertId) => {
-  const type = getRandomElementFromArray(DATA_TYPE);
+  const type = getRandomElementFromArray(TYPES);
   const title = getTitle(type);
-  const features = getRandomArray(DATA_FEATURES);
+  const features = getRandomArray(FEATURES);
   const lat = getRandomFloatFromRange(LAT_FROM_VALUE, LAT_TO_VALUE, LOCATION_FRACTION_DIGITS_COUNT);
   const lng = getRandomFloatFromRange(LNG_FROM_VALUE, LNG_TO_VALUE, LOCATION_FRACTION_DIGITS_COUNT);
 
@@ -64,11 +64,11 @@ const advertCard = (advertId) => {
       type: type,
       rooms: getRandomIntegerFromRange(1, ROOMS_MAX_COUNT),
       guests: getRandomIntegerFromRange(1, MAX_GUESTS_COUNT),
-      checkin: getRandomElementFromArray(DATA_CHECKIN_CHECKOUT),
-      checkout: getRandomElementFromArray(DATA_CHECKIN_CHECKOUT),
+      checkin: getRandomElementFromArray(CHECKIN_CHECKOUT_VALUES),
+      checkout: getRandomElementFromArray(CHECKIN_CHECKOUT_VALUES),
       features: features,
       description: getDescription(title, features),
-      photos: getRandomArray(DATA_PHOTOS),
+      photos: getRandomArray(PHOTOS),
     },
     location: {
       lat: lat,
