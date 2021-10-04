@@ -29,15 +29,9 @@ const createAvatar = (advertId) => {
 
 const getRandomElementFromArray = (dataArr) => dataArr[getRandomIntegerFromRange(0, dataArr.length - 1)];
 
-const getRandomArray = (dataArr) => {
-  if (dataArr.length < 2) {
-    return dataArr;
-  }
-
+const getRandomArray = (dataArr) => dataArr.length < 2 ? dataArr :
   // eslint-disable-next-line id-length
-  dataArr.map((i) => [Math.random(), i]).sort().map((i) => i[1]);
-  return dataArr.slice(0, getRandomIntegerFromRange(1, dataArr.length));
-};
+  dataArr.map((i) => [Math.random(), i]).sort().map((i) => i[1]).slice(0, getRandomIntegerFromRange(1, dataArr.length));
 
 const createTitle = (type) => `${DESCRIPTIONS[getRandomIntegerFromRange(0, DESCRIPTIONS.length - 1)]} ${type}`;
 
