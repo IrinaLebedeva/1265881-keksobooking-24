@@ -5,12 +5,14 @@ class ValidationError extends Error {
   }
 }
 
+const FRACTION_DIGITS_MIN = 0;
+const FRACTION_DIGITS_MAX = 100;
 const ERRORS = {
-  minIsNotPositiveOrZeroNumber: 'Минимальное значение из диапазона не может быть меньше нуля',
-  maxIsNotPositiveOrZeroNumber: 'Максимальное значение из диапазона не может быть меньше нуля',
-  maxSmallerThanMin: 'Максимальное значение диапазона не может быть меньше минимального',
-  maxIsEqualToMin: 'Максимальное значение диапазона равно минимальному',
-  fractionDigitsInvalidRange: 'Количество знаков после запятой может быть в диапазоне от 0 до 100',
+  minIsNotPositiveOrZeroNumber: 'The minimum value from the range cannot be less than zero',
+  maxIsNotPositiveOrZeroNumber: 'The maximum value from the range cannot be less than zero',
+  maxSmallerThanMin: 'The maximum value of the range cannot be less than the minimum',
+  maxIsEqualToMin: 'The maximum value of the range cannot be equal to the minimum',
+  fractionDigitsInvalidRange: `The number of decimal places can be in the range from ${FRACTION_DIGITS_MIN} to ${FRACTION_DIGITS_MAX}`,
 };
 
 /**
@@ -34,7 +36,7 @@ const checkRangeNumbers = (min, max) => {
  * @return ValidationError
  */
 const checkFractionDigits = (fractionDigits) => {
-  if (!((fractionDigits >= 0) && (fractionDigits <= 100))) {
+  if (fractionDigits < FRACTION_DIGITS_MIN || fractionDigits > FRACTION_DIGITS_MAX) {
     throw new ValidationError(ERRORS.fractionDigitsInvalidRange);
   }
 };
