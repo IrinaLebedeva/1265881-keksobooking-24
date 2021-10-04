@@ -10,7 +10,7 @@ const LAT_TO_VALUE = 35.70000;
 const LNG_FROM_VALUE = 139.70000;
 const LNG_TO_VALUE = 139.80000;
 const LOCATION_FRACTION_DIGITS_COUNT = 5;
-const TEMPLATE_AVATAR_URL = 'img/avatars/user{{xx}}.png';
+const TEMPLATE_AVATAR_URL = 'img/avatars/user{{id}}.png';
 const TEMPLATE_DESCRIPTION = '{{title}} with {{features}}';
 const DESCRIPTIONS = ['beautiful', 'comfortable', 'cool', 'wonderful', 'perfect'];
 const TYPES = ['palace', 'flat', 'house', 'bungalow', 'hotel'];
@@ -22,68 +22,60 @@ const PHOTOS = [
   'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/claire-rendall-b6kAwr1i0Iw.jpg',
 ];
 
-Array.prototype.mixArr = function () {
-  // eslint-disable-next-line id-length
-  return this.map((i) => [Math.random(), i]).sort().map((i) => i[1]);
-};
-
-String.prototype.capitalize = function() {
-  return this.charAt(0).toUpperCase() + this.slice(1);
-};
-
-const getAvatar = (advertId) => {
+const createAvatar = (advertId) => {
   const getAvatarId = (currentAdvertId) => currentAdvertId < 10 ? `0${currentAdvertId}` : currentAdvertId;
-  return TEMPLATE_AVATAR_URL.replace('{{xx}}', getAvatarId(advertId));
+  return TEMPLATE_AVATAR_URL.replace('{{id}}', getAvatarId(advertId));
 };
 
 const getRandomElementFromArray = (dataArr) => dataArr[getRandomIntegerFromRange(0, dataArr.length - 1)];
 
-const getRandomArray = (dataArr) => (dataArr.length > 1) ?
-  dataArr.mixArr().slice(0, getRandomIntegerFromRange(1, dataArr.length)) : dataArr;
+const getRandomArray = (dataArr) => {
+  if (dataArr.length < 2) {
+    return dataArr;
+  }
 
-const getTitle = (type) => `${DESCRIPTIONS[getRandomIntegerFromRange(0, DESCRIPTIONS.length - 1)]} ${type}`.capitalize();
+  // eslint-disable-next-line id-length
+  dataArr.map((i) => [Math.random(), i]).sort().map((i) => i[1]);
+  return dataArr.slice(0, getRandomIntegerFromRange(1, dataArr.length));
+};
 
-const getDescription = (title, features) =>
+const createTitle = (type) => `${DESCRIPTIONS[getRandomIntegerFromRange(0, DESCRIPTIONS.length - 1)]} ${type}`;
+
+const createDescription = (title, features) =>
   TEMPLATE_DESCRIPTION.replace('{{title}}', title).replace('{{features}}', features.reverse().join(', '));
 
-const advertCard = (advertId) => {
+const getAdvertCard = (advertId) => {
   const type = getRandomElementFromArray(TYPES);
-  const title = getTitle(type);
+  const title = createTitle(type);
   const features = getRandomArray(FEATURES);
   const lat = getRandomFloatFromRange(LAT_FROM_VALUE, LAT_TO_VALUE, LOCATION_FRACTION_DIGITS_COUNT);
   const lng = getRandomFloatFromRange(LNG_FROM_VALUE, LNG_TO_VALUE, LOCATION_FRACTION_DIGITS_COUNT);
 
   return {
     author: {
-      avatar: getAvatar(advertId),
+      avatar: createAvatar(advertId),
     },
     offer: {
-      title: title,
+      title,
       address: `${lat}, ${lng}`,
       price: getRandomIntegerFromRange(PRICE_MIN_VALUE, PRICE_MAX_VALUE),
-      type: type,
+      type,
       rooms: getRandomIntegerFromRange(1, ROOMS_MAX_COUNT),
       guests: getRandomIntegerFromRange(1, MAX_GUESTS_COUNT),
       checkin: getRandomElementFromArray(CHECKIN_CHECKOUT_VALUES),
       checkout: getRandomElementFromArray(CHECKIN_CHECKOUT_VALUES),
-      features: features,
-      description: getDescription(title, features),
+      features,
+      description: createDescription(title, features),
       photos: getRandomArray(PHOTOS),
     },
     location: {
-      lat: lat,
-      lng: lng,
+      lat,
+      lng,
     },
   };
 };
 
-const getAdvertCards = () => {
-  const mockAdvertCards = [];
-  // eslint-disable-next-line id-length
-  for (let i = 0; i < ADVERTS_COUNT; i++) {
-    mockAdvertCards[i] = advertCard(i+1);
-  }
-  return mockAdvertCards;
-};
+// eslint-disable-next-line id-length
+const getAdvertCards = () => Array(ADVERTS_COUNT).fill(null).map((_, i) => getAdvertCard(i+1));
 
 getAdvertCards();
