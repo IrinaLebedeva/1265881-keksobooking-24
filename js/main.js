@@ -22,16 +22,21 @@ const PHOTOS = [
   'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/claire-rendall-b6kAwr1i0Iw.jpg',
 ];
 
-const createAvatar = (advertId) => {
-  const getAvatarId = (currentAdvertId) => currentAdvertId < 10 ? `0${currentAdvertId}` : currentAdvertId;
-  return TEMPLATE_AVATAR_URL.replace('{{id}}', getAvatarId(advertId));
+const createAvatarUrl = (advertId) => {
+  const id = advertId < 10 ? `0${advertId}` : advertId;
+  return TEMPLATE_AVATAR_URL.replace('{{id}}', id);
 };
 
 const getRandomElementFromArray = (dataArr) => dataArr[getRandomIntegerFromRange(0, dataArr.length - 1)];
 
-const getRandomArray = (dataArr) => dataArr.length < 2 ? dataArr :
-  // eslint-disable-next-line id-length
-  dataArr.map((i) => [Math.random(), i]).sort().map((i) => i[1]).slice(0, getRandomIntegerFromRange(1, dataArr.length));
+const getRandomArray = (dataArr) => {
+  if (dataArr.length < 2) {
+    return dataArr;
+  }
+
+  const shuffledDataArr = dataArr.map((i) => [Math.random(), i]).sort().map((i) => i[1]);
+  return shuffledDataArr.slice(0, getRandomIntegerFromRange(1, dataArr.length));
+};
 
 const createTitle = (type) => `${DESCRIPTIONS[getRandomIntegerFromRange(0, DESCRIPTIONS.length - 1)]} ${type}`;
 
@@ -47,7 +52,7 @@ const getAdvertCard = (advertId) => {
 
   return {
     author: {
-      avatar: createAvatar(advertId),
+      avatar: createAvatarUrl(advertId),
     },
     offer: {
       title,
@@ -69,7 +74,6 @@ const getAdvertCard = (advertId) => {
   };
 };
 
-// eslint-disable-next-line id-length
 const getAdvertCards = () => Array(ADVERTS_COUNT).fill(null).map((_, i) => getAdvertCard(i+1));
 
 getAdvertCards();
