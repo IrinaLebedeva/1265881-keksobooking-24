@@ -8,11 +8,11 @@ class ValidationError extends Error {
 const FRACTION_DIGITS_MIN = 0;
 const FRACTION_DIGITS_MAX = 100;
 const ERRORS = {
-  minIsNotPositiveOrZeroNumber: 'The minimum value from the range cannot be less than zero',
-  maxIsNotPositiveOrZeroNumber: 'The maximum value from the range cannot be less than zero',
-  maxSmallerThanMin: 'The maximum value of the range cannot be less than the minimum',
-  maxIsEqualToMin: 'The maximum value of the range cannot be equal to the minimum',
-  fractionDigitsInvalidRange: `The number of decimal places can be in the range from ${FRACTION_DIGITS_MIN} to ${FRACTION_DIGITS_MAX}`,
+  minIsNotPositiveOrZeroNumber: new ValidationError('The minimum value from the range cannot be less than zero'),
+  maxIsNotPositiveOrZeroNumber: new ValidationError('The maximum value from the range cannot be less than zero'),
+  maxSmallerThanMin: new ValidationError('The maximum value of the range cannot be less than the minimum'),
+  maxIsEqualToMin: new ValidationError('The maximum value of the range cannot be equal to the minimum'),
+  fractionDigitsInvalidRange: new ValidationError(`The number of decimal places can be in the range from ${FRACTION_DIGITS_MIN} to ${FRACTION_DIGITS_MAX}`),
 };
 
 /**
@@ -27,7 +27,7 @@ const checkRangeNumbers = (min, max) => {
     (max < min ? ERRORS.maxSmallerThanMin : null) ||
     (max === min ? ERRORS.maxIsEqualToMin : null);
   if (error) {
-    throw new ValidationError(error);
+    throw error;
   }
 };
 
@@ -37,7 +37,7 @@ const checkRangeNumbers = (min, max) => {
  */
 const checkFractionDigits = (fractionDigits) => {
   if (fractionDigits < FRACTION_DIGITS_MIN || fractionDigits > FRACTION_DIGITS_MAX) {
-    throw new ValidationError(ERRORS.fractionDigitsInvalidRange);
+    throw ERRORS.fractionDigitsInvalidRange;
   }
 };
 
