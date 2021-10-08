@@ -1,4 +1,4 @@
-import {getRandomFloatFromRange, getRandomIntegerFromRange} from './get-random-number.js';
+import {getRandomFloatFromRange, getRandomIntegerFromRange} from './utils/get-random-number.js';
 
 const ROOMS_MAX_COUNT = 7;
 const PRICE_MIN_VALUE = 500;
@@ -21,11 +21,6 @@ const PHOTOS = [
   'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/claire-rendall-b6kAwr1i0Iw.jpg',
 ];
 
-const createAvatarUrl = (advertId) => {
-  const id = advertId < 10 ? `0${advertId}` : advertId;
-  return TEMPLATE_AVATAR_URL.replace('{{id}}', id);
-};
-
 const getRandomElementFromArray = (dataArr) => dataArr[getRandomIntegerFromRange(0, dataArr.length - 1)];
 
 const getRandomArray = (dataArr) => {
@@ -37,12 +32,21 @@ const getRandomArray = (dataArr) => {
   return shuffledDataArr.slice(0, getRandomIntegerFromRange(1, dataArr.length));
 };
 
+const createAvatarUrl = (advertId) => {
+  const id = advertId < 10 ? `0${advertId}` : advertId;
+  return TEMPLATE_AVATAR_URL.replace('{{id}}', id);
+};
+
 const createTitle = (type) => `${DESCRIPTIONS[getRandomIntegerFromRange(0, DESCRIPTIONS.length - 1)]} ${type}`;
 
 const createDescription = (title, features) =>
   TEMPLATE_DESCRIPTION.replace('{{title}}', title).replace('{{features}}', features.reverse().join(', '));
 
-const getAdvertCard = (advertId) => {
+/** *
+ * @param {number} advertId
+ * @return {Object}
+ */
+const createAdvertCard = (advertId) => {
   const type = getRandomElementFromArray(TYPES);
   const title = createTitle(type);
   const features = getRandomArray(FEATURES);
@@ -73,4 +77,10 @@ const getAdvertCard = (advertId) => {
   };
 };
 
-export {getAdvertCard};
+/**
+ * @param {number} advertsCount
+ * @return {Array.<Object>}
+ */
+const getAdvertCards = (advertsCount) => Array(advertsCount).fill(null).map((_, i) => createAdvertCard(i + 1));
+
+export {createAdvertCard, getAdvertCards};

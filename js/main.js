@@ -1,7 +1,7 @@
-import {getAdvertCard} from './utils/get-advert-card.js';
+import {getAdvertCards} from './data-mock.js';
 
 const ADVERTS_COUNT = 10;
 
-const getAdvertCards = () => Array(ADVERTS_COUNT).fill(null).map((_, i) => getAdvertCard(i+1));
+const advertCards = getAdvertCards(ADVERTS_COUNT);
 
-getAdvertCards();
+advertCards;
