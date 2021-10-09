@@ -1,7 +1,7 @@
-import {getAdvertCards} from './data-mock.js';
+import {createAdvertCards} from './data-mock.js';
 
 const ADVERTS_COUNT = 10;
 
-const advertCards = getAdvertCards(ADVERTS_COUNT);
+const advertCards = createAdvertCards(ADVERTS_COUNT);
 
 advertCards;

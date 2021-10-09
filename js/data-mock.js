@@ -81,6 +81,6 @@ const createAdvertCard = (advertId) => {
  * @param {number} advertsCount
  * @return {Array.<Object>}
  */
-const getAdvertCards = (advertsCount) => Array(advertsCount).fill(null).map((_, i) => createAdvertCard(i + 1));
+const createAdvertCards = (advertsCount) => Array(advertsCount).fill(null).map((_, i) => createAdvertCard(i + 1));
 
-export {createAdvertCard, getAdvertCards};
+export {createAdvertCard, createAdvertCards};
