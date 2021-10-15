@@ -36,12 +36,7 @@ const setElementTextContentByPattern = (element, selector, valueParts, separator
     }
   }
 
-  if (resultTextContentParts.length) {
-    element.querySelector(selector).textContent = resultTextContentParts.join(separator);
-  } else {
-    element.querySelector(selector).textContent = '';
-    element.querySelector(selector).classList.add(HIDDEN_CSS_CLASS_NAME);
-  }
+  setElementTextContent(element, selector, resultTextContentParts.join(separator));
 };
 
 const setElementImageSrc = (element, selector, value) => {
@@ -53,55 +48,51 @@ const setElementImageSrc = (element, selector, value) => {
 };
 
 const setElementFeatures = (element, features) => {
-  const featureListContainer = element.querySelector('.popup__features');
+  const featureListContainerElement = element.querySelector('.popup__features');
 
   if (!features) {
-    featureListContainer.innerHTML = '';
-    featureListContainer.classList.add(HIDDEN_CSS_CLASS_NAME);
+    featureListContainerElement.innerHTML = '';
+    featureListContainerElement.classList.add(HIDDEN_CSS_CLASS_NAME);
     return;
   }
 
-  const featureList = element.querySelectorAll('.popup__feature');
-  let usedfeaturesCount = featureList.length;
-  featureList.forEach((featureListItem) => {
-    const isAvailableFeature = features.some(
-      (featureName) => featureListItem.classList.contains(`popup__feature--${featureName}`),
-    );
+  const usedFeaturesSelector = features.map((feature) => `.popup__feature--${feature}`).join(', ');
+  const excludedFeaturesListElements = element.querySelectorAll(`.popup__features > :not(${usedFeaturesSelector})`);
+  const excludedFeaturesListElementsNumber = excludedFeaturesListElements.length;
+  excludedFeaturesListElements.forEach((feature) => feature.remove());
 
-    if (!isAvailableFeature) {
-      usedfeaturesCount--;
-      featureListItem.remove();
-    }
-  });
-
-  if (!usedfeaturesCount) {
-    featureListContainer.classList.add(HIDDEN_CSS_CLASS_NAME);
+  if (element.querySelectorAll('.popup__feature').length === excludedFeaturesListElementsNumber) {
+    featureListContainerElement.classList.add(HIDDEN_CSS_CLASS_NAME);
   }
 };
 
-const setElementPhotos = (element, photos) => {
+const getNotEmptyPhotos = (photos) => {
   if (!photos) {
-    element.querySelector('.popup__photos').classList.add(HIDDEN_CSS_CLASS_NAME);
-    return;
+    return false;
   }
+  const notEmptyPhotos = [];
+  for (let i = 0; i < photos.length; i++) {
+    if (photos[i].length) {
+      notEmptyPhotos.push(photos[i]);
+    }
+  }
+  return notEmptyPhotos.length ? notEmptyPhotos : false;
+};
 
+const setElementPhotos = (element, photos) => {
   const photosContainer = element.querySelector('.popup__photos');
   photosContainer.innerHTML = '';
-  const photosContainerFragment = document.createDocumentFragment();
-
-  for (let i = 0; i < photos.length; i++) {
-    if (!photos[i].length) {
-      continue;
-    }
-    const photoTemplate = cardPhotosTemplate.cloneNode(true);
-    photoTemplate.querySelector('.popup__photo').src = photos[i];
-    photosContainerFragment.appendChild(photoTemplate);
-  }
-  if (!photosContainerFragment.children.length) {
+  if (!photos) {
     photosContainer.classList.add(HIDDEN_CSS_CLASS_NAME);
     return;
   }
 
+  const photosContainerFragment = document.createDocumentFragment();
+  photos.forEach((photo) => {
+    const photoTemplate = cardPhotosTemplate.querySelector('.popup__photo').cloneNode(true);
+    photoTemplate.src = photo;
+    photosContainerFragment.appendChild(photoTemplate);
+  });
   photosContainer.appendChild(photosContainerFragment);
 };
 
@@ -149,7 +140,7 @@ const generateCardMarkup = (card) => {
   );
   setElementFeatures(element, card.offer.features);
   setElementTextContent(element, '.popup__description', card.offer.description);
-  setElementPhotos(element, card.offer.photos);
+  setElementPhotos(element, getNotEmptyPhotos(card.offer.photos));
   setElementImageSrc(element, '.popup__avatar', card.author.avatar);
 
   return element;
