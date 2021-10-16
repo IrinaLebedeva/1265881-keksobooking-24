@@ -1,6 +1,5 @@
 const HIDDEN_CSS_CLASS_NAME = 'hidden';
 const LANG_PATTERNS = {
-  price: '{{price}} ₽/ночь',
   checkin: 'Заезд после {{checkin}}',
   checkout: 'выезд до {{checkout}}',
 };
@@ -25,7 +24,7 @@ const setElementTextContent = (element, selector, value) => {
   }
 };
 
-const setElementTextContentByPattern = (element, selector, valueParts, separator = ' ') => {
+const setElementTextContentFromParts = (element, selector, valueParts, separator = ' ') => {
   const resultTextContentParts = [];
 
   for (const valuePart of valueParts) {
@@ -35,6 +34,10 @@ const setElementTextContentByPattern = (element, selector, valueParts, separator
   }
 
   setElementTextContent(element, selector, resultTextContentParts.join(separator));
+};
+
+const setElementPrice = (element, selector, value) => {
+  setElementTextContent(element, selector, value ? `${value} ₽/ночь` : false);
 };
 
 const setElementImageSrc = (element, selector, value) => {
@@ -127,16 +130,10 @@ const generateCardMarkup = (card) => {
   const element = cardTemplate.cloneNode(true);
   setElementTextContent(element, '.popup__title', card.offer.title);
   setElementTextContent(element, '.popup__text--address', card.offer.address);
-  setElementTextContentByPattern(element, '.popup__text--price',
-    [{
-      value: card.offer.price,
-      pattern: '{{price}}',
-      langPattern: LANG_PATTERNS.price,
-    }],
-  );
+  setElementPrice(element, '.popup__text--price', card.offer.price);
   setElementTextContent(element, '.popup__type', OFFER_TYPES[card.offer.type]);
   setElementTextContent(element, '.popup__text--capacity', getCapacityLangString(card.offer.rooms, card.offer.guests));
-  setElementTextContentByPattern(element, '.popup__text--time',
+  setElementTextContentFromParts(element, '.popup__text--time',
     [
       {
         value: card.offer.checkin,
