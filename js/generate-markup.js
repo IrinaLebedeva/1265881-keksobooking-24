@@ -1,8 +1,4 @@
 const HIDDEN_CSS_CLASS_NAME = 'hidden';
-const LANG_PATTERNS = {
-  checkin: 'Заезд после {{checkin}}',
-  checkout: 'выезд до {{checkout}}',
-};
 const OFFER_TYPES = {
   flat: 'Квартира',
   bungalow: 'Бунгало',
@@ -24,20 +20,15 @@ const setElementTextContent = (element, selector, value) => {
   }
 };
 
-const setElementTextContentFromParts = (element, selector, valueParts, separator = ' ') => {
-  const resultTextContentParts = [];
-
-  for (const valuePart of valueParts) {
-    if (valuePart.value) {
-      resultTextContentParts.push(valuePart.langPattern.replace(valuePart.pattern, valuePart.value));
-    }
-  }
-
-  setElementTextContent(element, selector, resultTextContentParts.join(separator));
-};
-
 const setElementPrice = (element, selector, value) => {
   setElementTextContent(element, selector, value ? `${value} ₽/ночь` : false);
+};
+
+const setElementTime = (element, selector, checkinValue, checkoutValue) => {
+  const langStringParts = [];
+  langStringParts.push(checkinValue ? `Заезд после ${checkinValue}` : false);
+  langStringParts.push(checkoutValue ? `выезд до ${checkoutValue}` : false);
+  setElementTextContent(element, selector, langStringParts.filter((langString) => langString !== false).join(', '));
 };
 
 const setElementImageSrc = (element, selector, value) => {
@@ -133,21 +124,7 @@ const generateCardMarkup = (card) => {
   setElementPrice(element, '.popup__text--price', card.offer.price);
   setElementTextContent(element, '.popup__type', OFFER_TYPES[card.offer.type]);
   setElementTextContent(element, '.popup__text--capacity', getCapacityLangString(card.offer.rooms, card.offer.guests));
-  setElementTextContentFromParts(element, '.popup__text--time',
-    [
-      {
-        value: card.offer.checkin,
-        pattern: '{{checkin}}',
-        langPattern: LANG_PATTERNS.checkin,
-      },
-      {
-        value: card.offer.checkout,
-        pattern: '{{checkout}}',
-        langPattern: LANG_PATTERNS.checkout,
-      },
-    ],
-    ', ',
-  );
+  setElementTime(element, '.popup__text--time', card.offer.checkin, card.offer.checkout);
   setElementFeatures(element, card.offer.features);
   setElementTextContent(element, '.popup__description', card.offer.description);
   setElementPhotos(element, getNotEmptyPhotos(card.offer.photos));
