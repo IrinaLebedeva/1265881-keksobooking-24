@@ -1,8 +1,6 @@
 const HIDDEN_CSS_CLASS_NAME = 'hidden';
 const LANG_PATTERNS = {
   price: '{{price}} ₽/ночь',
-  capacityRooms: '{{rooms}} комнаты',
-  capacityGuests: 'для {{guests}} гостей',
   checkin: 'Заезд после {{checkin}}',
   checkout: 'выезд до {{checkout}}',
 };
@@ -96,9 +94,37 @@ const setElementPhotos = (element, photos) => {
   photosContainer.appendChild(photosContainerFragment);
 };
 
+const getCapacityRoomsLangString = (rooms) => {
+  if (!rooms) {
+    return false;
+  }
+  let langString = `${rooms} комнат`;
+  if (rooms < 2) {
+    langString = `${rooms} комната`;
+  } else if (rooms < 5) {
+    langString = `${rooms} комнаты`;
+  }
+  return langString;
+};
+
+const getCapacityGuestsLangString = (guests) => {
+  if (guests) {
+    return guests === 1 ? `для ${guests} гостя` : `для ${guests} гостей`;
+  } else {
+    return false;
+  }
+};
+
+const getCapacityLangString = (rooms, guests) => {
+  const langStringParts = [];
+  langStringParts.push(getCapacityRoomsLangString(rooms));
+  langStringParts.push(getCapacityGuestsLangString(guests));
+
+  return langStringParts.filter((langString) => langString !== false).join(' ');
+};
+
 const generateCardMarkup = (card) => {
   const element = cardTemplate.cloneNode(true);
-
   setElementTextContent(element, '.popup__title', card.offer.title);
   setElementTextContent(element, '.popup__text--address', card.offer.address);
   setElementTextContentByPattern(element, '.popup__text--price',
@@ -109,20 +135,7 @@ const generateCardMarkup = (card) => {
     }],
   );
   setElementTextContent(element, '.popup__type', OFFER_TYPES[card.offer.type]);
-  setElementTextContentByPattern(element, '.popup__text--capacity',
-    [
-      {
-        value: card.offer.rooms,
-        pattern: '{{rooms}}',
-        langPattern: LANG_PATTERNS.capacityRooms,
-      },
-      {
-        value: card.offer.guests,
-        pattern: '{{guests}}',
-        langPattern: LANG_PATTERNS.capacityGuests,
-      },
-    ],
-  );
+  setElementTextContent(element, '.popup__text--capacity', getCapacityLangString(card.offer.rooms, card.offer.guests));
   setElementTextContentByPattern(element, '.popup__text--time',
     [
       {
