@@ -24,31 +24,39 @@ class CardMarkup {
     this.setImageSrc('.popup__avatar', card.author.avatar);
   }
 
+  hideElement(element) {
+    element.classList.add(HIDDEN_CSS_CLASS_NAME);
+  }
+
+  /**
+   * @param {String} selector
+   * @param {String} value
+   */
   setTextContent(selector, value) {
     if (value) {
       this.node.querySelector(selector).textContent = value;
     } else {
       this.node.querySelector(selector).textContent = '';
-      this.node.querySelector(selector).classList.add(HIDDEN_CSS_CLASS_NAME);
+      this.hideElement(this.node.querySelector(selector));
     }
   }
 
   setPrice(selector, value) {
-    this.setTextContent(selector, value ? `${value} ₽/ночь` : false);
+    this.setTextContent(selector, value ? `${value} ₽/ночь` : '');
   }
 
   setTime(selector, checkinValue, checkoutValue) {
     const langStringParts = [];
-    langStringParts.push(checkinValue ? `Заезд после ${checkinValue}` : false);
-    langStringParts.push(checkoutValue ? `выезд до ${checkoutValue}` : false);
-    this.setTextContent(selector, langStringParts.filter((langString) => langString !== false).join(', '));
+    langStringParts.push(checkinValue ? `Заезд после ${checkinValue}` : '');
+    langStringParts.push(checkoutValue ? `выезд до ${checkoutValue}` : '');
+    this.setTextContent(selector, langStringParts.filter((langString) => langString.length).join(', '));
   }
 
   setImageSrc(selector, value) {
     if (value) {
       this.node.querySelector(selector).src = value;
     } else {
-      this.node.remove();
+      this.node.querySelector(selector).remove();
     }
   }
 
@@ -57,37 +65,31 @@ class CardMarkup {
 
     if (!features) {
       featureListContainerElement.innerHTML = '';
-      featureListContainerElement.classList.add(HIDDEN_CSS_CLASS_NAME);
+      this.hideElement(featureListContainerElement);
       return;
     }
 
     const usedFeaturesSelector = features.map((feature) => `.popup__feature--${feature}`).join(', ');
     const excludedFeaturesListElements = this.node.querySelectorAll(`.popup__features > :not(${usedFeaturesSelector})`);
-    const excludedFeaturesListElementsNumber = excludedFeaturesListElements.length;
     excludedFeaturesListElements.forEach((feature) => feature.remove());
 
-    if (this.node.querySelectorAll('.popup__feature').length === excludedFeaturesListElementsNumber) {
-      featureListContainerElement.classList.add(HIDDEN_CSS_CLASS_NAME);
+    if (!this.node.querySelectorAll('.popup__feature').length) {
+      this.hideElement(featureListContainerElement);
     }
   }
 
   getNotEmptyPhotos(photos) {
     if (!photos) {
-      return false;
+      return [];
     }
-    const notEmptyPhotos = [];
-    for (let i = 0; i < photos.length; i++) {
-      if (photos[i].length) {
-        notEmptyPhotos.push(photos[i]);
-      }
-    }
-    return notEmptyPhotos.length ? notEmptyPhotos : false;
+    const notEmptyPhotos = photos.filter((photo) => photo.length);
+    return notEmptyPhotos.length ? notEmptyPhotos : [];
   }
 
   setPhotos(photos) {
     const photosContainer = this.node.querySelector('.popup__photos');
     photosContainer.innerHTML = '';
-    if (!photos) {
+    if (!photos.length) {
       photosContainer.classList.add(HIDDEN_CSS_CLASS_NAME);
       return;
     }
@@ -104,7 +106,7 @@ class CardMarkup {
 
   getCapacityRoomsLangString(rooms) {
     if (!rooms) {
-      return false;
+      return '';
     }
     let langString = `${rooms} комнат`;
     if (rooms < 2) {
@@ -119,7 +121,7 @@ class CardMarkup {
     if (guests) {
       return guests === 1 ? `для ${guests} гостя` : `для ${guests} гостей`;
     } else {
-      return false;
+      return '';
     }
   }
 
@@ -128,13 +130,17 @@ class CardMarkup {
     langStringParts.push(this.getCapacityRoomsLangString(rooms));
     langStringParts.push(this.getCapacityGuestsLangString(guests));
 
-    return langStringParts.filter((langString) => langString !== false).join(' ');
+    return langStringParts.filter((langString) => langString !== '').join(' ');
+  }
+
+  getNode() {
+    return this.node;
   }
 }
 
 const generateCardMarkup = (card) => {
   const cardMarkup = new CardMarkup(card);
-  return cardMarkup.node;
+  return cardMarkup.getNode();
 };
 
 export {generateCardMarkup};

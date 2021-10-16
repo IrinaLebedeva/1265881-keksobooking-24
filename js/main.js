@@ -5,10 +5,8 @@ const ADVERTS_COUNT = 10;
 
 const advertCards = createAdvertCards(ADVERTS_COUNT);
 
-const cardsFragment = document.createDocumentFragment();
-for (let i = 0; i < advertCards.length; i++) {
-  cardsFragment.appendChild(generateCardMarkup(advertCards[i]));
-  if (i === 0) {
-    document.querySelector('#map-canvas').appendChild(cardsFragment);
-  }
-}
+const renderCard = (card, cardContainer) => {
+  cardContainer.appendChild(generateCardMarkup(card));
+};
+
+renderCard(advertCards[7], document.querySelector('#map-canvas'));
