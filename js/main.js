@@ -1,5 +1,6 @@
 import {createAdvertCards} from './data-mock.js';
 import {generateCardMarkup} from './generate-markup.js';
+import './validate-advert-form.js';
 
 const ADVERTS_COUNT = 10;
 
