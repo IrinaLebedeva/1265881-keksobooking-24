@@ -39,7 +39,7 @@ const timeInElement = formElement.querySelector('select[name="timein"]');
 const timeOutElement = formElement.querySelector('select[name="timeout"]');
 
 const setPriceMinAttribute = () => {
-  const currentType = typeElement.options[typeElement.selectedIndex].value;
+  const currentType = typeElement.value;
   priceElement.min = MIN_PRICE_BY_TYPES[currentType];
   priceElement.placeholder = MIN_PRICE_BY_TYPES[currentType];
 };

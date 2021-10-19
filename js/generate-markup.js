@@ -87,7 +87,7 @@ class CardMarkup {
     const photosContainer = this.node.querySelector('.popup__photos');
     photosContainer.innerHTML = '';
     if (!photos.length) {
-      photosContainer.classList.add(HIDDEN_CSS_CLASS_NAME);
+      hideElement(photosContainer);
       return;
     }
 
