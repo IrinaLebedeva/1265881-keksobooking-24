@@ -1,4 +1,5 @@
-const HIDDEN_CSS_CLASS_NAME = 'hidden';
+import {hideElement} from './utils/hide-show-element.js';
+
 const OFFER_TYPES = {
   flat: 'Квартира',
   bungalow: 'Бунгало',
@@ -24,10 +25,6 @@ class CardMarkup {
     this.setImageSrc('.popup__avatar', card.author.avatar);
   }
 
-  hideElement(element) {
-    element.classList.add(HIDDEN_CSS_CLASS_NAME);
-  }
-
   /**
    * @param {String} selector
    * @param {String} value
@@ -37,7 +34,7 @@ class CardMarkup {
       this.node.querySelector(selector).textContent = value;
     } else {
       this.node.querySelector(selector).textContent = '';
-      this.hideElement(this.node.querySelector(selector));
+      hideElement(this.node.querySelector(selector));
     }
   }
 
@@ -65,7 +62,7 @@ class CardMarkup {
 
     if (!features) {
       featureListContainerElement.innerHTML = '';
-      this.hideElement(featureListContainerElement);
+      hideElement(featureListContainerElement);
       return;
     }
 
@@ -74,7 +71,7 @@ class CardMarkup {
     excludedFeaturesListElements.forEach((feature) => feature.remove());
 
     if (!this.node.querySelectorAll('.popup__feature').length) {
-      this.hideElement(featureListContainerElement);
+      hideElement(featureListContainerElement);
     }
   }
 
