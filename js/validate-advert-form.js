@@ -1,6 +1,6 @@
 import {formatString} from './utils/format-string.js';
+import {hideElement, showElement} from './utils/hide-show-element.js';
 
-const HIDDEN_CSS_CLASS_NAME = 'hidden';
 const UI_LANG = 'ru';
 const TITLE_MIN_LENGTH = 30;
 const TITLE_MAX_LENGTH = 100;
@@ -53,12 +53,12 @@ const updateCapacityElementProperties = (currentRoomsNumber) => {
 
     if (AVAILABLE_CAPACITY_BY_ROOMS[currentRoomsNumber].find((roomsValue) => Number(roomsValue) === Number(option.value)) === undefined) {
       option.setAttribute('disabled', 'disabled');
-      option.classList.add(HIDDEN_CSS_CLASS_NAME);
+      hideElement(option);
     } else {
       if (maxAvailableSelectedValue < option.value) {
         maxAvailableSelectedValue = option.value;
       }
-      option.classList.remove(HIDDEN_CSS_CLASS_NAME);
+      showElement(option);
     }
   });
   Array.prototype.forEach.call(capacityOptionsList, (option) => {
@@ -68,7 +68,7 @@ const updateCapacityElementProperties = (currentRoomsNumber) => {
   });
 };
 
-const setAvailableCapacity = () => updateCapacityElementProperties(roomsNumberElement.options[roomsNumberElement.selectedIndex].value);
+const setAvailableCapacity = () => updateCapacityElementProperties(roomsNumberElement.value);
 
 const syncTimeInField = () => {
   timeInElement.value = timeOutElement.value;
@@ -82,60 +82,50 @@ const syncTimeOutField = () => {
  * @returns {boolean} true, if field value is valid
  */
 const validateTitleElement = () => {
-  let isError = true;
   const titleElementLength = titleElement.value.length;
+  let reportMessage = '';
 
   if (titleElement.validity.valueMissing) {
-    titleElement.setCustomValidity(UI_MESSAGES[UI_LANG]['validate'].required);
+    reportMessage = UI_MESSAGES[UI_LANG]['validate'].required;
   } else if (titleElementLength < TITLE_MIN_LENGTH) {
-    titleElement.setCustomValidity(formatString(UI_MESSAGES[UI_LANG]['validate'].tooShortLength, TITLE_MIN_LENGTH - titleElementLength));
+    reportMessage = formatString(UI_MESSAGES[UI_LANG]['validate'].tooShortLength, TITLE_MIN_LENGTH - titleElementLength);
   } else if (titleElementLength > TITLE_MAX_LENGTH) {
-    titleElement.setCustomValidity(formatString(UI_MESSAGES[UI_LANG]['validate'].tooLongLength, titleElementLength - TITLE_MAX_LENGTH));
-  } else {
-    titleElement.setCustomValidity('');
-    isError = false;
+    reportMessage = formatString(UI_MESSAGES[UI_LANG]['validate'].tooLongLength, titleElementLength - TITLE_MAX_LENGTH);
   }
-  titleElement.reportValidity();
+  titleElement.setCustomValidity(reportMessage);
 
-  return !isError;
+  return titleElement.reportValidity();
 };
 
 /**
  * @returns {boolean} true, if field value is valid
  */
 const validatePriceElement = () => {
-  let isError = true;
   const priceElementValue = Number(priceElement.value);
   const priceMinValueByType = Number(priceElement.min);
+  let reportMessage = '';
 
   if (priceElementValue > PRICE_MAX_VALUE) {
-    priceElement.setCustomValidity(formatString(UI_MESSAGES[UI_LANG]['validate'].tooBigPriceValue, priceElementValue - PRICE_MAX_VALUE, PRICE_MAX_VALUE));
+    reportMessage = formatString(UI_MESSAGES[UI_LANG]['validate'].tooBigPriceValue, priceElementValue - PRICE_MAX_VALUE, PRICE_MAX_VALUE);
   } else if (priceElementValue < priceMinValueByType || priceElement.validity.rangeUnderflow) {
-    priceElement.setCustomValidity(formatString(UI_MESSAGES[UI_LANG]['validate'].tooSmallPriceValue, priceMinValueByType));
+    reportMessage = formatString(UI_MESSAGES[UI_LANG]['validate'].tooSmallPriceValue, priceMinValueByType);
   } else if (priceElement.validity.typeMismatch || priceElement.validity.badInput) {
-    priceElement.setCustomValidity(UI_MESSAGES[UI_LANG]['validate'].numberRequired);
+    reportMessage = UI_MESSAGES[UI_LANG]['validate'].numberRequired;
   } else if (priceElement.validity.valueMissing) {
-    priceElement.setCustomValidity(UI_MESSAGES[UI_LANG]['validate'].required);
-  } else {
-    priceElement.setCustomValidity('');
-    isError = false;
+    reportMessage = UI_MESSAGES[UI_LANG]['validate'].required;
   }
-  priceElement.reportValidity();
+  priceElement.setCustomValidity(reportMessage);
 
-  return !isError;
+  return priceElement.reportValidity();
 };
 
 /**
  * @returns {boolean} true, if form fields values are valid
  */
-const validateForm = () => {
-  const validationResult = [];
-  validationResult.push(validateTitleElement());
-  validationResult.push(validatePriceElement());
-
-  const isError = validationResult.some((value) => value === false);
-  return !isError;
-};
+const validateForm = () => [
+  validateTitleElement(),
+  validatePriceElement(),
+].some((value) => !value);
 
 const formInitialize = () => {
   setAvailableCapacity();
@@ -148,9 +138,9 @@ const formInitialize = () => {
     setPriceMinAttribute();
     validatePriceElement();
   });
-  roomsNumberElement.addEventListener('change', () => setAvailableCapacity());
-  timeInElement.addEventListener('change', () => syncTimeOutField());
-  timeOutElement.addEventListener('change', () => syncTimeInField());
+  roomsNumberElement.addEventListener('change', setAvailableCapacity);
+  timeInElement.addEventListener('change', syncTimeOutField);
+  timeOutElement.addEventListener('change', syncTimeInField);
 };
 
 formElement.addEventListener('submit', (evt) => {
