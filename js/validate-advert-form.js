@@ -1,20 +1,9 @@
 import {formatString} from './utils/format-string.js';
 import {hideElement, showElement} from './utils/hide-show-element.js';
 
-const UI_LANG = 'ru';
 const TITLE_MIN_LENGTH = 30;
 const TITLE_MAX_LENGTH = 100;
 const PRICE_MAX_VALUE = 1000000;
-const UI_MESSAGES = [];
-UI_MESSAGES['ru'] = [];
-UI_MESSAGES['ru']['validate'] = {
-  tooShortLength: 'Добавьте ещё $0 симв.',
-  tooLongLength: 'Удалите $0 симв.',
-  required: 'Поле является обязательным для заполнения',
-  tooBigPriceValue: 'Пожалуйста 🙏 , снизьте цену хотя бы на $0! Максимально допустимое значение поля $1',
-  tooSmallPriceValue: 'Для выбранного типа жилья 🏠 минимально допустимая цена $0',
-  numberRequired: 'Пожалуйста 🙏 , исправьте ввёденное значение. Допускаются только числа.',
-};
 const MIN_PRICE_BY_TYPES = {
   'palace': 10000,
   'flat': 1000,
@@ -28,6 +17,7 @@ const AVAILABLE_CAPACITY_BY_ROOMS = {
   '3': ['1', '2', '3'],
   '100': ['0'],
 };
+let messages;
 
 const formElement = document.querySelector('form[name="advert-form"]');
 const titleElement = formElement.querySelector('input[name="title"]');
@@ -37,6 +27,8 @@ const roomsNumberElement = formElement.querySelector('select[name="rooms"]');
 const capacityElement = formElement.querySelector('select[name="capacity"]');
 const timeInElement = formElement.querySelector('select[name="timein"]');
 const timeOutElement = formElement.querySelector('select[name="timeout"]');
+
+const getMessage = (type, key) => messages[type][key] || `${type}:${key}`;
 
 const setPriceMinAttribute = () => {
   const currentType = typeElement.value;
@@ -86,11 +78,11 @@ const validateTitleElement = () => {
   let reportMessage = '';
 
   if (titleElement.validity.valueMissing) {
-    reportMessage = UI_MESSAGES[UI_LANG]['validate'].required;
+    reportMessage = getMessage('validate', 'required');
   } else if (titleElementLength < TITLE_MIN_LENGTH) {
-    reportMessage = formatString(UI_MESSAGES[UI_LANG]['validate'].tooShortLength, TITLE_MIN_LENGTH - titleElementLength);
+    reportMessage = formatString(getMessage('validate', 'tooShortLength'), TITLE_MIN_LENGTH - titleElementLength);
   } else if (titleElementLength > TITLE_MAX_LENGTH) {
-    reportMessage = formatString(UI_MESSAGES[UI_LANG]['validate'].tooLongLength, titleElementLength - TITLE_MAX_LENGTH);
+    reportMessage = formatString(getMessage('validate', 'tooLongLength'), titleElementLength - TITLE_MAX_LENGTH);
   }
   titleElement.setCustomValidity(reportMessage);
 
@@ -106,13 +98,13 @@ const validatePriceElement = () => {
   let reportMessage = '';
 
   if (priceElementValue > PRICE_MAX_VALUE) {
-    reportMessage = formatString(UI_MESSAGES[UI_LANG]['validate'].tooBigPriceValue, priceElementValue - PRICE_MAX_VALUE, PRICE_MAX_VALUE);
+    reportMessage = formatString(getMessage('validate', 'tooBigPriceValue'), priceElementValue - PRICE_MAX_VALUE, PRICE_MAX_VALUE);
   } else if (priceElementValue < priceMinValueByType || priceElement.validity.rangeUnderflow) {
-    reportMessage = formatString(UI_MESSAGES[UI_LANG]['validate'].tooSmallPriceValue, priceMinValueByType);
+    reportMessage = formatString(getMessage('validate', 'tooSmallPriceValue'), priceMinValueByType);
   } else if (priceElement.validity.typeMismatch || priceElement.validity.badInput) {
-    reportMessage = UI_MESSAGES[UI_LANG]['validate'].numberRequired;
+    reportMessage = getMessage('validate', 'numberRequired');
   } else if (priceElement.validity.valueMissing) {
-    reportMessage = UI_MESSAGES[UI_LANG]['validate'].required;
+    reportMessage = getMessage('validate', 'required');
   }
   priceElement.setCustomValidity(reportMessage);
 
@@ -127,7 +119,8 @@ const validateForm = () => [
   validatePriceElement(),
 ].some((value) => !value);
 
-const formInitialize = () => {
+const formInitialize = (langMessages) => {
+  messages = langMessages;
   setAvailableCapacity();
   setPriceMinAttribute();
   titleElement.focus();
@@ -149,4 +142,4 @@ formElement.addEventListener('submit', (evt) => {
   }
 });
 
-formInitialize();
+export {formInitialize};
