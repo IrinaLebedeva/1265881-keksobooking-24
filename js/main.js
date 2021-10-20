@@ -14,6 +14,5 @@ const renderCard = (card, cardContainer) => {
 
 renderCard(advertCards[7], document.querySelector('#map-canvas'));
 
-loadLang(getCurrentLang()).then((langStrings) => {
-  formInitialize(langStrings);
-});
+loadLang(getCurrentLang());
+formInitialize();
