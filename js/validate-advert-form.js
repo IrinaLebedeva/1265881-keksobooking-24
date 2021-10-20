@@ -46,9 +46,7 @@ const setPriceMinAttribute = () => {
 
 const updateCapacityElementProperties = (currentRoomsNumber) => {
   const capacityOptionsList = capacityElement.options;
-  let maxAvailableSelectedValue = 0;
-
-  [...capacityOptionsList].forEach((option) => {
+  const maxAvailableValue = [...capacityOptionsList].reduce((maxAvailableSelectedValue, option) => {
     option.removeAttribute('selected');
     option.removeAttribute('disabled');
 
@@ -61,9 +59,10 @@ const updateCapacityElementProperties = (currentRoomsNumber) => {
       }
       showElement(option);
     }
-  });
+    return maxAvailableSelectedValue;
+  }, 0);
   [...capacityOptionsList].forEach((option) => {
-    if (Number(option.value) === Number(maxAvailableSelectedValue)) {
+    if (Number(option.value) === Number(maxAvailableValue)) {
       option.setAttribute('selected', 'selected');
     }
   });
