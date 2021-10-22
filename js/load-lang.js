@@ -20,6 +20,6 @@ const loadLang = (lang) =>
     messages = json;
   });
 
-const getMessage = (key) => messages[key] || DEFAULT_MESSAGES[key] || `${key}`;
+const getMessage = (key) => messages[key] || key;
 
-export {loadLang, getMessage};
+export {loadLang, getMessage, DEFAULT_MESSAGES};

@@ -1,6 +1,6 @@
 import {formatString} from './utils/format-string.js';
 import {hideElement, showElement} from './utils/hide-show-element.js';
-import {getMessage} from './load-lang.js';
+import {getMessage, DEFAULT_MESSAGES} from './load-lang.js';
 
 const TITLE_MIN_LENGTH = 30;
 const TITLE_MAX_LENGTH = 100;
@@ -76,11 +76,11 @@ const validateTitleElement = () => {
   let reportMessage = '';
 
   if (titleElement.validity.valueMissing) {
-    reportMessage = getMessage('required');
+    reportMessage = getMessage(DEFAULT_MESSAGES.required);
   } else if (titleElementLength < TITLE_MIN_LENGTH) {
-    reportMessage = formatString(getMessage('tooShortLength'), TITLE_MIN_LENGTH - titleElementLength);
+    reportMessage = formatString(getMessage(DEFAULT_MESSAGES.tooShortLength), TITLE_MIN_LENGTH - titleElementLength);
   } else if (titleElementLength > TITLE_MAX_LENGTH) {
-    reportMessage = formatString(getMessage('tooLongLength'), titleElementLength - TITLE_MAX_LENGTH);
+    reportMessage = formatString(getMessage(DEFAULT_MESSAGES.tooLongLength), titleElementLength - TITLE_MAX_LENGTH);
   }
   titleElement.setCustomValidity(reportMessage);
 
@@ -96,13 +96,13 @@ const validatePriceElement = () => {
   let reportMessage = '';
 
   if (priceElementValue > PRICE_MAX_VALUE) {
-    reportMessage = formatString(getMessage('tooBigPriceValue'), priceElementValue - PRICE_MAX_VALUE, PRICE_MAX_VALUE);
+    reportMessage = formatString(getMessage(DEFAULT_MESSAGES.tooBigPriceValue), priceElementValue - PRICE_MAX_VALUE, PRICE_MAX_VALUE);
   } else if (priceElementValue < priceMinValueByType || priceElement.validity.rangeUnderflow) {
-    reportMessage = formatString(getMessage('tooSmallPriceValue'), priceMinValueByType);
+    reportMessage = formatString(getMessage(DEFAULT_MESSAGES.tooSmallPriceValue), priceMinValueByType);
   } else if (priceElement.validity.typeMismatch || priceElement.validity.badInput) {
-    reportMessage = getMessage('numberRequired');
+    reportMessage = getMessage(DEFAULT_MESSAGES.numberRequired);
   } else if (priceElement.validity.valueMissing) {
-    reportMessage = getMessage('required');
+    reportMessage = getMessage(DEFAULT_MESSAGES.required);
   }
   priceElement.setCustomValidity(reportMessage);
 
