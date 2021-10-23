@@ -21,12 +21,17 @@ const AVAILABLE_CAPACITY_BY_ROOMS = {
 
 const formElement = document.querySelector('form[name="advert-form"]');
 const titleElement = formElement.querySelector('input[name="title"]');
+const addressElement = formElement.querySelector('input[name="address"]');
 const priceElement = formElement.querySelector('input[name="price"]');
 const typeElement = formElement.querySelector('select[name="type"]');
 const roomsNumberElement = formElement.querySelector('select[name="rooms"]');
 const capacityElement = formElement.querySelector('select[name="capacity"]');
 const timeInElement = formElement.querySelector('select[name="timein"]');
 const timeOutElement = formElement.querySelector('select[name="timeout"]');
+
+const setAddress = (coordinates) => {
+  addressElement.value = `${coordinates.lat}, ${coordinates.lng}`;
+};
 
 const setPriceMinAttribute = () => {
   const currentType = typeElement.value;
@@ -112,7 +117,7 @@ const validatePriceElement = () => {
 /**
  * @returns {boolean} true, if form fields values are valid
  */
-const validateForm = () => [
+const validateForm = () => ![
   validateTitleElement(),
   validatePriceElement(),
 ].some((value) => !value);
@@ -139,4 +144,4 @@ formElement.addEventListener('submit', (evt) => {
   }
 });
 
-export {formInitialize};
+export {formInitialize, setAddress};
