@@ -1,4 +1,4 @@
-import {mapInitialize, addMainMarker, addCommonMarker} from './map.js';
+import {mapInitialize, setMainMarker, setCommonMarkers} from './map.js';
 import {createAdvertCards} from './data-mock.js';
 import {setPageInactive, setPageActive} from './set-page-state.js';
 import {generateCardMarkup} from './generate-markup.js';
@@ -10,29 +10,13 @@ const ADVERTS_COUNT = 10;
 
 const map = mapInitialize();
 
-const setMainMarker = () => {
-  const mainMarker = addMainMarker(map);
-  setAddress(mainMarker.getLatLng());
-  mainMarker.on('moveend', () => {
-    setAddress(mainMarker.getLatLng());
-  });
-};
-
-const setCommonMarkers = () => {
-  const advertCards = createAdvertCards(ADVERTS_COUNT);
-  advertCards.forEach((card) => {
-    const marker = addCommonMarker(map, [card.location.lat, card.location.lng]);
-    marker.bindPopup(() => generateCardMarkup(card));
-  });
-};
-
 setPageInactive();
 
 map.whenReady(() => {
   setPageActive();
 
-  setMainMarker();
-  setCommonMarkers();
+  setMainMarker(setAddress);
+  setCommonMarkers(createAdvertCards(ADVERTS_COUNT), generateCardMarkup);
 
   loadLang(getCurrentLang());
   formInitialize();
