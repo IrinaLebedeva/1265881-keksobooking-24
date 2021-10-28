@@ -10,16 +10,18 @@ import {getCurrentLang} from './utils/get-current-lang.js';
 const GET_ADVERTS_DATA_URL = 'https://24.javascript.pages.academy/keksobooking/data';
 const map = mapInitialize();
 
-setPageInactive();
-
 const generateCommonMarkers = (advertCards) => setCommonMarkers(advertCards, generateCardMarkup);
 
-map.whenReady(() => {
-  setPageActive();
+const pageInit = () => {
+  map.whenReady(() => {
+    setPageActive();
 
-  setMainMarker(setAddress);
-  getData(GET_ADVERTS_DATA_URL, generateCommonMarkers, showGetDataErrorMessage);
+    setMainMarker(setAddress);
+    getData(GET_ADVERTS_DATA_URL, generateCommonMarkers, showGetDataErrorMessage);
 
-  loadLang(getCurrentLang());
-  formInitialize();
-});
+    formInitialize();
+  });
+};
+
+setPageInactive();
+loadLang(getCurrentLang()).finally(pageInit);
