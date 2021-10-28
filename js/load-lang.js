@@ -5,6 +5,7 @@ const DEFAULT_MESSAGES = {
   tooBigPriceValue: 'Please 🙏 , cut the price by at least $0! The maximum allowed field value is $1',
   tooSmallPriceValue: 'The minimum allowed price for the selected type of accommodation 🏠 is $0',
   numberRequired: 'Please 🙏 , correct the entered value. Only numbers are allowed',
+  getDataError: 'An error occurred while downloading data from the server, but posting ads is working properly. You can add your ad while we restore the data loading service.',
 };
 
 let messages = {};
