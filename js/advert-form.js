@@ -1,6 +1,11 @@
 import {formatString} from './utils/format-string.js';
 import {hideElement, showElement} from './utils/hide-show-element.js';
 import {getMessage, DEFAULT_MESSAGES} from './load-lang.js';
+import {showSendDataErrorMessage, showSendDataSuccessMessage} from './ui-messages.js';
+import {sendData} from './api-methods.js';
+import {setPageInactive, setPageActive} from './set-page-state.js';
+import {resetMainMarker} from './map.js';
+import {resetForm as resetFilterForm} from './filter-form.js';
 
 const TITLE_MIN_LENGTH = 30;
 const TITLE_MAX_LENGTH = 100;
@@ -28,6 +33,7 @@ const roomsNumberElement = formElement.querySelector('select[name="rooms"]');
 const capacityElement = formElement.querySelector('select[name="capacity"]');
 const timeInElement = formElement.querySelector('select[name="timein"]');
 const timeOutElement = formElement.querySelector('select[name="timeout"]');
+const resetButtonElement = formElement.querySelector('.ad-form__reset');
 
 const setAddress = (coordinates) => {
   addressElement.value = `${coordinates.lat}, ${coordinates.lng}`;
@@ -125,7 +131,6 @@ const validateForm = () => ![
 const formInitialize = () => {
   setAvailableCapacity();
   setPriceMinAttribute();
-  titleElement.focus();
 
   titleElement.addEventListener('input', validateTitleElement);
   priceElement.addEventListener('input', validatePriceElement);
@@ -138,10 +143,44 @@ const formInitialize = () => {
   timeOutElement.addEventListener('change', syncTimeInField);
 };
 
+const resetForm = () => {
+  formElement.reset();
+  setPriceMinAttribute();
+  setAvailableCapacity();
+  resetMainMarker(setAddress);
+};
+
+const onSuccessFormSubmit = () => {
+  resetForm();
+  resetFilterForm();
+  setPageInactive();
+  showSendDataSuccessMessage();
+};
+
+const onErrorFormSubmit = () => {
+  setPageInactive();
+  showSendDataErrorMessage();
+};
+
+const onFinalFormSubmit = () => setPageActive();
+
 formElement.addEventListener('submit', (evt) => {
-  if (!validateForm()) {
-    evt.preventDefault();
+  evt.preventDefault();
+
+  if (validateForm()) {
+    const formData = new FormData(formElement);
+    sendData(
+      formElement.getAttribute('action'),
+      formData,
+      onSuccessFormSubmit,
+      onErrorFormSubmit,
+      onFinalFormSubmit);
   }
+});
+
+resetButtonElement.addEventListener('click', (evt) => {
+  evt.preventDefault();
+  resetForm();
 });
 
 export {formInitialize, setAddress};

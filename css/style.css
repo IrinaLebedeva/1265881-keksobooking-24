@@ -954,6 +954,18 @@ fieldset {
   font-weight: 700;
 }
 
+.error--get-data {
+  display: flex;
+  justify-content: center;
+}
+
+.error--get-data .error__message {
+  max-width: 800px;
+
+  font-size: 30px;
+  font-weight: 500;
+}
+
 .success__message::before,
 .error__message::before {
   content: "";

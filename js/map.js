@@ -1,16 +1,17 @@
-const ZOOM_LEVEL = 8;
+const ZOOM_LEVEL = 14;
 const DEFAULT_MARKER_COORDINATES = [35.681729, 139.753927];
 const MAIN_ICON = {
   url: './img/main-pin.svg',
-  size: [32, 32],
-  anchor: [16, 32],
+  size: [52, 52],
+  anchor: [26, 52],
 };
 const COMMON_ICON = {
   url: './img/pin.svg',
-  size: [32, 32],
-  anchor: [16, 32],
+  size: [40, 40],
+  anchor: [20, 40],
 };
 let map = undefined;
+let mainMarker = undefined;
 
 const mapInitialize = () => {
   map = L.map('map-canvas').setView(DEFAULT_MARKER_COORDINATES, ZOOM_LEVEL);
@@ -45,11 +46,16 @@ const setCommonMarkers = (advertCards, callback) => {
 };
 
 const setMainMarker = (callback) => {
-  const mainMarker = addMainMarker(map);
+  mainMarker = addMainMarker(map);
   callback(mainMarker.getLatLng());
   mainMarker.on('moveend', () => {
     callback(mainMarker.getLatLng());
   });
 };
 
-export {mapInitialize, setMainMarker, setCommonMarkers};
+const resetMainMarker = (callback) => {
+  mainMarker.setLatLng(DEFAULT_MARKER_COORDINATES);
+  callback(mainMarker.getLatLng());
+};
+
+export {mapInitialize, setMainMarker, setCommonMarkers, resetMainMarker};
