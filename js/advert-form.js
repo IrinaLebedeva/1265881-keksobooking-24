@@ -7,6 +7,7 @@ import {setPageInactive, setPageActive} from './set-page-state.js';
 import {resetMainMarker, setMapDefaultView} from './map.js';
 import {resetForm as resetFilterForm} from './filter-form.js';
 import {mapClosePopup} from './map.js';
+import {setAvatarElementChange, setImagesElementChange, clearPreviewImages} from './preview-advert-form-images.js';
 
 const TITLE_MIN_LENGTH = 30;
 const TITLE_MAX_LENGTH = 100;
@@ -142,6 +143,9 @@ const advertFormInitialize = () => {
   roomsNumberElement.addEventListener('change', setAvailableCapacity);
   timeInElement.addEventListener('change', syncTimeOutField);
   timeOutElement.addEventListener('change', syncTimeInField);
+
+  setAvatarElementChange();
+  setImagesElementChange();
 };
 
 const resetForm = () => {
@@ -149,6 +153,7 @@ const resetForm = () => {
   setPriceMinAttribute();
   setAvailableCapacity();
   resetMainMarker(setAddress);
+  clearPreviewImages();
 };
 
 const onSuccessFormSubmit = () => {
