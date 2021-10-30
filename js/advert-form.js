@@ -4,8 +4,9 @@ import {getMessage, DEFAULT_MESSAGES} from './load-lang.js';
 import {showSendDataErrorMessage, showSendDataSuccessMessage} from './ui-messages.js';
 import {sendData} from './api-methods.js';
 import {setPageInactive, setPageActive} from './set-page-state.js';
-import {resetMainMarker} from './map.js';
+import {resetMainMarker, setMapDefaultView} from './map.js';
 import {resetForm as resetFilterForm} from './filter-form.js';
+import {mapClosePopup} from './map.js';
 
 const TITLE_MIN_LENGTH = 30;
 const TITLE_MAX_LENGTH = 100;
@@ -153,6 +154,8 @@ const resetForm = () => {
 const onSuccessFormSubmit = () => {
   resetForm();
   resetFilterForm();
+  mapClosePopup();
+  setMapDefaultView();
   setPageInactive();
   showSendDataSuccessMessage();
 };

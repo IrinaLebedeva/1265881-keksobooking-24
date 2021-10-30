@@ -13,8 +13,13 @@ const COMMON_ICON = {
 let map = undefined;
 let mainMarker = undefined;
 
+const setMapDefaultView = () => {
+  map.setView(DEFAULT_MARKER_COORDINATES, ZOOM_LEVEL);
+};
+
 const mapInitialize = () => {
-  map = L.map('map-canvas').setView(DEFAULT_MARKER_COORDINATES, ZOOM_LEVEL);
+  map = L.map('map-canvas');
+  setMapDefaultView();
 
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
@@ -58,4 +63,6 @@ const resetMainMarker = (callback) => {
   callback(mainMarker.getLatLng());
 };
 
-export {mapInitialize, setMainMarker, setCommonMarkers, resetMainMarker};
+const mapClosePopup = () => map.closePopup();
+
+export {mapInitialize, setMainMarker, setCommonMarkers, resetMainMarker, mapClosePopup, setMapDefaultView};
