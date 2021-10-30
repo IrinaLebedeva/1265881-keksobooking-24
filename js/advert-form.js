@@ -128,7 +128,7 @@ const validateForm = () => ![
   validatePriceElement(),
 ].some((value) => !value);
 
-const formInitialize = () => {
+const advertFormInitialize = () => {
   setAvailableCapacity();
   setPriceMinAttribute();
 
@@ -183,4 +183,4 @@ resetButtonElement.addEventListener('click', (evt) => {
   resetForm();
 });
 
-export {formInitialize, setAddress};
+export {advertFormInitialize, setAddress};

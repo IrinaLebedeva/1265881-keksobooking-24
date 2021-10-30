@@ -1,4 +1,4 @@
-const ZOOM_LEVEL = 14;
+const ZOOM_LEVEL = 13;
 const DEFAULT_MARKER_COORDINATES = [35.681729, 139.753927];
 const MAIN_ICON = {
   url: './img/main-pin.svg',
