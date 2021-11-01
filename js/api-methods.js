@@ -32,7 +32,13 @@ const sendData = (url, data, onSuccess, onError, onFinal) => {
       method: 'POST',
       body: data,
     }).
-    then(onSuccess).
+    then((response) => {
+      if (response.ok) {
+        onSuccess();
+      } else {
+        throw new FetchError(`${response.url} ${response.status} (${response.statusText})`);
+      }
+    }).
     catch(onError).
     finally(onFinal);
 };
