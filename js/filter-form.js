@@ -105,6 +105,8 @@ const filterByFeatures = (card) => {
 };
 
 const renderFilteredCommonMarkers = () => {
+  removeMapMarkersList();
+
   const filteredAdvertCards = [];
   for (const card of advertCards) {
     if (filterByType(card) &&
@@ -119,7 +121,6 @@ const renderFilteredCommonMarkers = () => {
     }
   }
 
-  removeMapMarkersList();
   setCommonMarkers(filteredAdvertCards, generateCardMarkup);
 };
 
