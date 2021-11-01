@@ -47,31 +47,27 @@ const setPriceMinAttribute = () => {
   priceElement.placeholder = MIN_PRICE_BY_TYPES[currentType];
 };
 
-const updateCapacityElementProperties = (currentRoomsNumber) => {
+const setAvailableCapacity = () => {
+  const currentRoomsNumber = roomsNumberElement.value;
   const capacityOptionsList = capacityElement.options;
   const maxAvailableValue = [...capacityOptionsList].reduce((maxAvailableSelectedValue, option) => {
     option.removeAttribute('selected');
     option.removeAttribute('disabled');
 
-    if (AVAILABLE_CAPACITY_BY_ROOMS[currentRoomsNumber].find((roomsValue) => Number(roomsValue) === Number(option.value)) === undefined) {
-      option.setAttribute('disabled', 'disabled');
-      hideElement(option);
-    } else {
-      if (maxAvailableSelectedValue < option.value) {
+    if (AVAILABLE_CAPACITY_BY_ROOMS[currentRoomsNumber].some((roomsValue) => roomsValue === option.value)) {
+      if (Number(maxAvailableSelectedValue) < Number(option.value)) {
         maxAvailableSelectedValue = option.value;
       }
       showElement(option);
+    } else {
+      option.setAttribute('disabled', 'disabled');
+      hideElement(option);
     }
     return maxAvailableSelectedValue;
   }, 0);
-  [...capacityOptionsList].forEach((option) => {
-    if (Number(option.value) === Number(maxAvailableValue)) {
-      option.setAttribute('selected', 'selected');
-    }
-  });
-};
 
-const setAvailableCapacity = () => updateCapacityElementProperties(roomsNumberElement.value);
+  capacityElement.value = maxAvailableValue;
+};
 
 const syncTimeInField = () => {
   timeInElement.value = timeOutElement.value;
@@ -161,12 +157,10 @@ const onSuccessFormSubmit = () => {
   resetFilterForm();
   mapClosePopup();
   setMapDefaultView();
-  setPageInactive();
   showSendDataSuccessMessage();
 };
 
 const onErrorFormSubmit = () => {
-  setPageInactive();
   showSendDataErrorMessage();
 };
 
@@ -177,6 +171,7 @@ formElement.addEventListener('submit', (evt) => {
 
   if (validateForm()) {
     const formData = new FormData(formElement);
+    setPageInactive();
     sendData(
       formElement.getAttribute('action'),
       formData,
