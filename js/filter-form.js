@@ -38,87 +38,89 @@ const filterFormInitialize = (cards) => {
   advertCards = cards;
 };
 
-const filterByType = (cards) => {
+const filterByType = (card) => {
   if (typeFilterElement.value !== DEFAULT_TYPE_FILTER_VALUE) {
-    cards = cards.filter((card) => (card.offer.type) ? card.offer.type === typeFilterElement.value : false);
+    return (card.offer.type) ? card.offer.type === typeFilterElement.value : false;
   }
-  return cards;
+  return true;
 };
 
-const filterByPrice = (cards) => {
+const filterByPrice = (card) => {
   const priceCurrentType = PRICE_FILTER_RANGE[priceFilterElement.value];
   if (priceFilterElement.value !== DEFAULT_PRICE_FILTER_VALUE && priceCurrentType) {
-    cards = cards.filter((card) => {
-      if (!card.offer.price) {
-        return false;
-      }
+    if (!card.offer.price) {
+      return false;
+    }
 
-      const priceValue = Number(card.offer.price);
-      if (priceValue >= priceCurrentType.from) {
-        if (priceCurrentType.to) {
-          if (priceValue < priceCurrentType.to) {
-            return true;
-          }
-        } else {
+    const priceValue = Number(card.offer.price);
+    if (priceValue >= priceCurrentType.from) {
+      if (priceCurrentType.to) {
+        if (priceValue < priceCurrentType.to) {
           return true;
         }
+      } else {
+        return true;
       }
-      return false;
-    });
+    }
+    return false;
   }
-  return cards;
+  return true;
 };
 
-const filterByRoomsNumber = (cards) => {
+const filterByRoomsNumber = (card) => {
   if (roomsNumberFilterElement.value !== DEFAULT_ROOMS_NUMBER_FILTER_VALUE) {
-    const roomsNumber = Number(roomsNumberFilterElement.value);
-    cards = cards.filter((card) => {
-      if (!card.offer.rooms) {
-        return false;
-      }
-      return Number(card.offer.rooms) === roomsNumber;
-    });
+    if (!card.offer.rooms) {
+      return false;
+    }
+    return Number(card.offer.rooms) === Number(roomsNumberFilterElement.value);
   }
-  return cards;
+  return true;
 };
 
-const filterByGuestsNumber = (cards) => {
+const filterByGuestsNumber = (card) => {
   if (guestsNumberFilterElement.value !== DEFAULT_GUESTS_NUMBER_FILTER_VALUE) {
-    const guestsNumber = Number(guestsNumberFilterElement.value);
-    cards = cards.filter((card) => {
-      if (typeof card.offer.guests === 'undefined') {
-        return false;
-      }
-      return Number(card.offer.guests) === guestsNumber;
-    });
+    if (typeof card.offer.guests === 'undefined') {
+      return false;
+    }
+    return Number(card.offer.guests) === Number(guestsNumberFilterElement.value);
   }
-  return cards;
+  return true;
 };
 
-const filterByFeatures = (cards) => {
-  let filteredCards = cards;
+const filterByFeatures = (card) => {
+  let checkedFeaturesFilterCount = 0;
+  let cardFeaturesCount = 0;
   featuresFilterElementList.forEach((featuresFilterElement) => {
     if (featuresFilterElement.checked) {
-      filteredCards = filteredCards.filter((card) => {
-        if (!card.offer.features) {
-          return false;
-        }
-        return card.offer.features.includes(featuresFilterElement.value);
-      });
+      checkedFeaturesFilterCount++;
+      if (!card.offer.features) {
+        return false;
+      }
+      if (card.offer.features.includes(featuresFilterElement.value)) {
+        cardFeaturesCount++;
+      }
     }
   });
-  return filteredCards;
+  return cardFeaturesCount === checkedFeaturesFilterCount;
 };
 
 const renderFilteredCommonMarkers = () => {
-  let filteredAdvertCards = filterByType(advertCards);
-  filteredAdvertCards = filterByPrice(filteredAdvertCards);
-  filteredAdvertCards = filterByRoomsNumber(filteredAdvertCards);
-  filteredAdvertCards = filterByGuestsNumber(filteredAdvertCards);
-  filteredAdvertCards = filterByFeatures(filteredAdvertCards);
+  const filteredAdvertCards = [];
+  for (const card of advertCards) {
+    if (filterByType(card) &&
+      filterByPrice(card) &&
+      filterByRoomsNumber(card) &&
+      filterByGuestsNumber(card) &&
+      filterByFeatures(card)) {
+      filteredAdvertCards.push(card);
+    }
+    if (filteredAdvertCards.length === MAX_COMMON_MARKERS_COUNT_ON_MAP) {
+      break;
+    }
+  }
 
   removeMapMarkersList();
-  setCommonMarkers(filteredAdvertCards.slice(0, MAX_COMMON_MARKERS_COUNT_ON_MAP), generateCardMarkup);
+  setCommonMarkers(filteredAdvertCards, generateCardMarkup);
 };
 
 typeFilterElement.addEventListener('change', debounce(renderFilteredCommonMarkers, RERENDER_DELAY));
