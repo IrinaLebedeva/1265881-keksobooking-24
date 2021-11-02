@@ -126,19 +126,29 @@ const validateForm = () => ![
   validatePriceElement(),
 ].some((value) => !value);
 
+const onTitleInput = () => validateTitleElement();
+
+const onPriceInput = () => validatePriceElement();
+
+const onRoomsNumberChange = () => setAvailableCapacity();
+
+const onTimeInChange = () => syncTimeOutField();
+
+const onTimeOutChange = () => syncTimeInField();
+
 const advertFormInitialize = () => {
   setAvailableCapacity();
   setPriceMinAttribute();
 
-  titleElement.addEventListener('input', validateTitleElement);
-  priceElement.addEventListener('input', validatePriceElement);
+  titleElement.addEventListener('input', onTitleInput);
+  priceElement.addEventListener('input', onPriceInput);
   typeElement.addEventListener('change', () => {
     setPriceMinAttribute();
     validatePriceElement();
   });
-  roomsNumberElement.addEventListener('change', setAvailableCapacity);
-  timeInElement.addEventListener('change', syncTimeOutField);
-  timeOutElement.addEventListener('change', syncTimeInField);
+  roomsNumberElement.addEventListener('change', onRoomsNumberChange);
+  timeInElement.addEventListener('change', onTimeInChange);
+  timeOutElement.addEventListener('change', onTimeOutChange);
 
   setAvatarElementChange();
   setImagesElementChange();

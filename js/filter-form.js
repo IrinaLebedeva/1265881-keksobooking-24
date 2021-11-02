@@ -93,11 +93,21 @@ const renderFilteredCommonMarkers = () => {
   setCommonMarkers(filteredAdvertCards, generateCardMarkup);
 };
 
-typeFilterElement.addEventListener('change', debounce(renderFilteredCommonMarkers, RERENDER_DELAY));
-priceFilterElement.addEventListener('change', debounce(renderFilteredCommonMarkers, RERENDER_DELAY));
-roomsNumberFilterElement.addEventListener('change', debounce(renderFilteredCommonMarkers, RERENDER_DELAY));
-guestsNumberFilterElement.addEventListener('change', debounce(renderFilteredCommonMarkers, RERENDER_DELAY));
+const onTypeFilterChange = () => debounce(renderFilteredCommonMarkers, RERENDER_DELAY);
+
+const onPriceFilterChange = () => debounce(renderFilteredCommonMarkers, RERENDER_DELAY);
+
+const onRoomsNumberFilterChange = () => debounce(renderFilteredCommonMarkers, RERENDER_DELAY);
+
+const onGuestsNumberFilterChange = () => debounce(renderFilteredCommonMarkers, RERENDER_DELAY);
+
+const onFeaturesFilterElementClick = () => debounce(renderFilteredCommonMarkers, RERENDER_DELAY);
+
+typeFilterElement.addEventListener('change', onTypeFilterChange());
+priceFilterElement.addEventListener('change', onPriceFilterChange());
+roomsNumberFilterElement.addEventListener('change', onRoomsNumberFilterChange());
+guestsNumberFilterElement.addEventListener('change', onGuestsNumberFilterChange());
 featuresFilterElementList.forEach((element) =>
-  element.addEventListener('click', debounce(renderFilteredCommonMarkers, RERENDER_DELAY)));
+  element.addEventListener('click', onFeaturesFilterElementClick()));
 
 export {resetForm, filterFormInitialize};

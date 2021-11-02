@@ -26,6 +26,20 @@ const closeSendDataErrorMessage = (evt) => closeMessage(evt, `.${ERROR_SEND_DATA
 
 const closeSendDataSuccessMessage = (evt) => closeMessage(evt, `.${SUCCESS_SEND_DATA_CLASS_NAME}`, closeSendDataSuccessMessage);
 
+const onGetDataErrorClick = (evt) => closeGetDataErrorMessage(evt);
+
+const onDocumentGetDataErrorKeydown = (evt) => closeGetDataErrorMessage(evt);
+
+const onSendDataErrorButtonClick = (evt) => closeSendDataErrorMessage(evt);
+
+const onSendDataErrorClick = (evt) => closeSendDataErrorMessage(evt);
+
+const onDocumentSendDataErrorKeydown = (evt) => closeSendDataErrorMessage(evt);
+
+const onSendDataSuccessClick = (evt) => closeSendDataSuccessMessage(evt);
+
+const onDocumentSendDataSuccessKeydown = (evt) => closeSendDataSuccessMessage(evt);
+
 const showGetDataErrorMessage = () => {
   const errorNode = errorFragment.cloneNode(true);
   errorNode.querySelector('.error__message').textContent = getMessage(DefaultMessages.GET_DATA_ERROR);
@@ -34,8 +48,8 @@ const showGetDataErrorMessage = () => {
 
   const errorElement = bodyElement.appendChild(errorNode);
 
-  errorElement.addEventListener('click', closeGetDataErrorMessage);
-  document.addEventListener('keydown', closeGetDataErrorMessage);
+  errorElement.addEventListener('click', onGetDataErrorClick);
+  document.addEventListener('keydown', onDocumentGetDataErrorKeydown);
 };
 
 const showSendDataErrorMessage = () => {
@@ -46,9 +60,9 @@ const showSendDataErrorMessage = () => {
 
   const errorElement = bodyElement.appendChild(errorNode);
 
-  errorButton.addEventListener('click', closeSendDataErrorMessage);
-  errorElement.addEventListener('click', closeSendDataErrorMessage);
-  document.addEventListener('keydown', closeSendDataErrorMessage);
+  errorButton.addEventListener('click', onSendDataErrorButtonClick);
+  errorElement.addEventListener('click', onSendDataErrorClick);
+  document.addEventListener('keydown', onDocumentSendDataErrorKeydown);
 };
 
 const showSendDataSuccessMessage = () => {
@@ -57,8 +71,8 @@ const showSendDataSuccessMessage = () => {
 
   const successElement = bodyElement.appendChild(successNode);
 
-  successElement.addEventListener('click', closeSendDataSuccessMessage);
-  document.addEventListener('keydown', closeSendDataSuccessMessage);
+  successElement.addEventListener('click', onSendDataSuccessClick);
+  document.addEventListener('keydown', onDocumentSendDataSuccessKeydown);
 };
 
 export {showGetDataErrorMessage, showSendDataErrorMessage, showSendDataSuccessMessage};
