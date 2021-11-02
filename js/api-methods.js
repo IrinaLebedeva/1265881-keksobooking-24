@@ -5,7 +5,13 @@ class FetchError extends Error {
   }
 }
 
-const getData = (url, onSuccess, onError) => {
+const getDataCache = {};
+
+const getData = (url, onSuccess, onError, cacheKey) => {
+  if (getDataCache[cacheKey]) {
+    onSuccess(getDataCache[cacheKey]);
+    return;
+  }
   fetch(url).
     then((response) => {
       if (response.ok) {
@@ -13,7 +19,10 @@ const getData = (url, onSuccess, onError) => {
       }
       throw new FetchError(`${response.url} ${response.status} (${response.statusText})`);
     }).
-    then(onSuccess).
+    then((data) => {
+      getDataCache[cacheKey] = data;
+      onSuccess(getDataCache[cacheKey]);
+    }).
     catch(onError);
 };
 
@@ -23,7 +32,13 @@ const sendData = (url, data, onSuccess, onError, onFinal) => {
       method: 'POST',
       body: data,
     }).
-    then(onSuccess).
+    then((response) => {
+      if (response.ok) {
+        onSuccess();
+      } else {
+        throw new FetchError(`${response.url} ${response.status} (${response.statusText})`);
+      }
+    }).
     catch(onError).
     finally(onFinal);
 };

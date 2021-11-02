@@ -4,8 +4,10 @@ import {getMessage, DEFAULT_MESSAGES} from './load-lang.js';
 import {showSendDataErrorMessage, showSendDataSuccessMessage} from './ui-messages.js';
 import {sendData} from './api-methods.js';
 import {setPageInactive, setPageActive} from './set-page-state.js';
-import {resetMainMarker} from './map.js';
+import {resetMainMarker, setMapDefaultView} from './map.js';
 import {resetForm as resetFilterForm} from './filter-form.js';
+import {mapClosePopup} from './map.js';
+import {setAvatarElementChange, setImagesElementChange, clearPreviewImages} from './preview-advert-form-images.js';
 
 const TITLE_MIN_LENGTH = 30;
 const TITLE_MAX_LENGTH = 100;
@@ -45,31 +47,27 @@ const setPriceMinAttribute = () => {
   priceElement.placeholder = MIN_PRICE_BY_TYPES[currentType];
 };
 
-const updateCapacityElementProperties = (currentRoomsNumber) => {
+const setAvailableCapacity = () => {
+  const currentRoomsNumber = roomsNumberElement.value;
   const capacityOptionsList = capacityElement.options;
   const maxAvailableValue = [...capacityOptionsList].reduce((maxAvailableSelectedValue, option) => {
     option.removeAttribute('selected');
     option.removeAttribute('disabled');
 
-    if (AVAILABLE_CAPACITY_BY_ROOMS[currentRoomsNumber].find((roomsValue) => Number(roomsValue) === Number(option.value)) === undefined) {
-      option.setAttribute('disabled', 'disabled');
-      hideElement(option);
-    } else {
-      if (maxAvailableSelectedValue < option.value) {
+    if (AVAILABLE_CAPACITY_BY_ROOMS[currentRoomsNumber].some((roomsValue) => roomsValue === option.value)) {
+      if (Number(maxAvailableSelectedValue) < Number(option.value)) {
         maxAvailableSelectedValue = option.value;
       }
       showElement(option);
+    } else {
+      option.setAttribute('disabled', 'disabled');
+      hideElement(option);
     }
     return maxAvailableSelectedValue;
   }, 0);
-  [...capacityOptionsList].forEach((option) => {
-    if (Number(option.value) === Number(maxAvailableValue)) {
-      option.setAttribute('selected', 'selected');
-    }
-  });
-};
 
-const setAvailableCapacity = () => updateCapacityElementProperties(roomsNumberElement.value);
+  capacityElement.value = maxAvailableValue;
+};
 
 const syncTimeInField = () => {
   timeInElement.value = timeOutElement.value;
@@ -128,7 +126,7 @@ const validateForm = () => ![
   validatePriceElement(),
 ].some((value) => !value);
 
-const formInitialize = () => {
+const advertFormInitialize = () => {
   setAvailableCapacity();
   setPriceMinAttribute();
 
@@ -141,6 +139,9 @@ const formInitialize = () => {
   roomsNumberElement.addEventListener('change', setAvailableCapacity);
   timeInElement.addEventListener('change', syncTimeOutField);
   timeOutElement.addEventListener('change', syncTimeInField);
+
+  setAvatarElementChange();
+  setImagesElementChange();
 };
 
 const resetForm = () => {
@@ -148,17 +149,18 @@ const resetForm = () => {
   setPriceMinAttribute();
   setAvailableCapacity();
   resetMainMarker(setAddress);
+  clearPreviewImages();
 };
 
 const onSuccessFormSubmit = () => {
   resetForm();
   resetFilterForm();
-  setPageInactive();
+  mapClosePopup();
+  setMapDefaultView();
   showSendDataSuccessMessage();
 };
 
 const onErrorFormSubmit = () => {
-  setPageInactive();
   showSendDataErrorMessage();
 };
 
@@ -169,6 +171,7 @@ formElement.addEventListener('submit', (evt) => {
 
   if (validateForm()) {
     const formData = new FormData(formElement);
+    setPageInactive();
     sendData(
       formElement.getAttribute('action'),
       formData,
@@ -183,4 +186,4 @@ resetButtonElement.addEventListener('click', (evt) => {
   resetForm();
 });
 
-export {formInitialize, setAddress};
+export {advertFormInitialize, setAddress};

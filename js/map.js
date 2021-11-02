@@ -1,5 +1,6 @@
-const ZOOM_LEVEL = 14;
+const ZOOM_LEVEL = 13;
 const DEFAULT_MARKER_COORDINATES = [35.681729, 139.753927];
+const MAX_COMMON_MARKERS_COUNT_ON_MAP = 10;
 const MAIN_ICON = {
   url: './img/main-pin.svg',
   size: [52, 52],
@@ -12,9 +13,19 @@ const COMMON_ICON = {
 };
 let map = undefined;
 let mainMarker = undefined;
+const commonMarkers = [];
+
+const setMapDefaultView = () => {
+  map.setView(DEFAULT_MARKER_COORDINATES, ZOOM_LEVEL);
+};
+
+const removeMapMarkersList = () => {
+  commonMarkers.forEach((marker) => marker.remove());
+};
 
 const mapInitialize = () => {
-  map = L.map('map-canvas').setView(DEFAULT_MARKER_COORDINATES, ZOOM_LEVEL);
+  map = L.map('map-canvas');
+  setMapDefaultView();
 
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
@@ -41,6 +52,7 @@ const addMainMarker = () => addMarker(DEFAULT_MARKER_COORDINATES, getIcon(true),
 const setCommonMarkers = (advertCards, callback) => {
   advertCards.forEach((card) => {
     const marker = addCommonMarker([card.location.lat, card.location.lng]);
+    commonMarkers.push(marker);
     marker.bindPopup(() => callback(card));
   });
 };
@@ -58,4 +70,6 @@ const resetMainMarker = (callback) => {
   callback(mainMarker.getLatLng());
 };
 
-export {mapInitialize, setMainMarker, setCommonMarkers, resetMainMarker};
+const mapClosePopup = () => map.closePopup();
+
+export {mapInitialize, setMainMarker, setCommonMarkers, resetMainMarker, mapClosePopup, setMapDefaultView, removeMapMarkersList, MAX_COMMON_MARKERS_COUNT_ON_MAP};

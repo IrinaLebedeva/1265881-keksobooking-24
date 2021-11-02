@@ -9,7 +9,9 @@ const errorFragment = document.querySelector('#error').content.querySelector('.e
 const successFragment = document.querySelector('#success').content.querySelector('.success');
 
 const closeMessage = (evt, selector, onKeyDownHandler) => {
-  if (evt.type === 'keydown' && !isEscapeKey(evt)) {return;}
+  if (evt.type === 'keydown' && !isEscapeKey(evt)) {
+    return;
+  }
 
   document.removeEventListener('keydown', onKeyDownHandler);
   const element = document.querySelector(selector);
