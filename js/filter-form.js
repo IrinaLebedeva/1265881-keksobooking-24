@@ -52,7 +52,7 @@ const filterByPrice = (card) => {
       return false;
     }
 
-    const priceValue = Number(card.offer.price);
+    const priceValue = card.offer.price;
     if (priceValue >= priceCurrentType.from) {
       if (priceCurrentType.to) {
         if (priceValue < priceCurrentType.to) {
@@ -72,36 +72,37 @@ const filterByRoomsNumber = (card) => {
     if (!card.offer.rooms) {
       return false;
     }
-    return Number(card.offer.rooms) === Number(roomsNumberFilterElement.value);
+    return card.offer.rooms === Number(roomsNumberFilterElement.value);
   }
   return true;
 };
 
 const filterByGuestsNumber = (card) => {
   if (guestsNumberFilterElement.value !== DEFAULT_GUESTS_NUMBER_FILTER_VALUE) {
-    if (typeof card.offer.guests === 'undefined') {
+    if (card.offer.guests === undefined) {
       return false;
     }
-    return Number(card.offer.guests) === Number(guestsNumberFilterElement.value);
+    return card.offer.guests === Number(guestsNumberFilterElement.value);
   }
   return true;
 };
 
 const filterByFeatures = (card) => {
-  let checkedFeaturesFilterCount = 0;
+  const featuresCheckedElementsList = formElement.querySelectorAll('input[name="features"]:checked');
+  if (!featuresCheckedElementsList.length) {
+    return true;
+  }
+  if (!card.offer.features) {
+    return false;
+  }
+
   let cardFeaturesCount = 0;
-  featuresFilterElementList.forEach((featuresFilterElement) => {
-    if (featuresFilterElement.checked) {
-      checkedFeaturesFilterCount++;
-      if (!card.offer.features) {
-        return false;
-      }
-      if (card.offer.features.includes(featuresFilterElement.value)) {
-        cardFeaturesCount++;
-      }
+  featuresCheckedElementsList.forEach((featuresFilterElement) => {
+    if (card.offer.features.includes(featuresFilterElement.value)) {
+      cardFeaturesCount++;
     }
   });
-  return cardFeaturesCount === checkedFeaturesFilterCount;
+  return cardFeaturesCount === featuresCheckedElementsList.length;
 };
 
 const renderFilteredCommonMarkers = () => {
