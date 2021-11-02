@@ -38,7 +38,8 @@ const filterFormInitialize = (cards) => {
   advertCards = cards;
 };
 
-const filterByType = (card) => typeFilterElement.value === DEFAULT_TYPE_FILTER_VALUE || card.offer.type && card.offer.type === typeFilterElement.value;
+const filterByType = (card) => typeFilterElement.value === DEFAULT_TYPE_FILTER_VALUE ||
+  card.offer.type && card.offer.type === typeFilterElement.value;
 
 const filterByPrice = (card) => {
   const priceCurrentType = PRICE_FILTER_RANGE[priceFilterElement.value];
@@ -48,9 +49,11 @@ const filterByPrice = (card) => {
   return !(!card.offer.price || card.offer.price < priceCurrentType.from || priceCurrentType.to && card.offer.price >= priceCurrentType.to);
 };
 
-const filterByRoomsNumber = (card) => roomsNumberFilterElement.value === DEFAULT_ROOMS_NUMBER_FILTER_VALUE || card.offer.rooms && card.offer.rooms === Number(roomsNumberFilterElement.value);
+const filterByRoomsNumber = (card) => roomsNumberFilterElement.value === DEFAULT_ROOMS_NUMBER_FILTER_VALUE ||
+  card.offer.rooms && card.offer.rooms === Number(roomsNumberFilterElement.value);
 
-const filterByGuestsNumber = (card) => guestsNumberFilterElement.value === DEFAULT_GUESTS_NUMBER_FILTER_VALUE || card.offer.guests !== undefined && card.offer.guests === Number(guestsNumberFilterElement.value);
+const filterByGuestsNumber = (card) => guestsNumberFilterElement.value === DEFAULT_GUESTS_NUMBER_FILTER_VALUE ||
+  card.offer.guests !== undefined && card.offer.guests === Number(guestsNumberFilterElement.value);
 
 const filterByFeatures = (card) => {
   const featuresCheckedElementsList = formElement.querySelectorAll('input[name="features"]:checked');
