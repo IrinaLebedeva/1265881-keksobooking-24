@@ -38,12 +38,7 @@ const filterFormInitialize = (cards) => {
   advertCards = cards;
 };
 
-const filterByType = (card) => {
-  if (typeFilterElement.value !== DEFAULT_TYPE_FILTER_VALUE) {
-    return (card.offer.type) ? card.offer.type === typeFilterElement.value : false;
-  }
-  return true;
-};
+const filterByType = (card) => typeFilterElement.value === DEFAULT_TYPE_FILTER_VALUE || card.offer.type && card.offer.type === typeFilterElement.value;
 
 const filterByPrice = (card) => {
   const priceCurrentType = PRICE_FILTER_RANGE[priceFilterElement.value];
@@ -67,25 +62,9 @@ const filterByPrice = (card) => {
   return true;
 };
 
-const filterByRoomsNumber = (card) => {
-  if (roomsNumberFilterElement.value !== DEFAULT_ROOMS_NUMBER_FILTER_VALUE) {
-    if (!card.offer.rooms) {
-      return false;
-    }
-    return card.offer.rooms === Number(roomsNumberFilterElement.value);
-  }
-  return true;
-};
+const filterByRoomsNumber = (card) => roomsNumberFilterElement.value === DEFAULT_ROOMS_NUMBER_FILTER_VALUE || card.offer.rooms && card.offer.rooms === Number(roomsNumberFilterElement.value);
 
-const filterByGuestsNumber = (card) => {
-  if (guestsNumberFilterElement.value !== DEFAULT_GUESTS_NUMBER_FILTER_VALUE) {
-    if (card.offer.guests === undefined) {
-      return false;
-    }
-    return card.offer.guests === Number(guestsNumberFilterElement.value);
-  }
-  return true;
-};
+const filterByGuestsNumber = (card) => guestsNumberFilterElement.value === DEFAULT_GUESTS_NUMBER_FILTER_VALUE || card.offer.guests !== undefined && card.offer.guests === Number(guestsNumberFilterElement.value);
 
 const filterByFeatures = (card) => {
   const featuresCheckedElementsList = formElement.querySelectorAll('input[name="features"]:checked');
