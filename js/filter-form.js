@@ -42,24 +42,10 @@ const filterByType = (card) => typeFilterElement.value === DEFAULT_TYPE_FILTER_V
 
 const filterByPrice = (card) => {
   const priceCurrentType = PRICE_FILTER_RANGE[priceFilterElement.value];
-  if (priceFilterElement.value !== DEFAULT_PRICE_FILTER_VALUE && priceCurrentType) {
-    if (!card.offer.price) {
-      return false;
-    }
-
-    const priceValue = card.offer.price;
-    if (priceValue >= priceCurrentType.from) {
-      if (priceCurrentType.to) {
-        if (priceValue < priceCurrentType.to) {
-          return true;
-        }
-      } else {
-        return true;
-      }
-    }
-    return false;
+  if (priceFilterElement.value === DEFAULT_PRICE_FILTER_VALUE || !priceCurrentType) {
+    return true;
   }
-  return true;
+  return !(!card.offer.price || card.offer.price < priceCurrentType.from || priceCurrentType.to && card.offer.price >= priceCurrentType.to);
 };
 
 const filterByRoomsNumber = (card) => roomsNumberFilterElement.value === DEFAULT_ROOMS_NUMBER_FILTER_VALUE || card.offer.rooms && card.offer.rooms === Number(roomsNumberFilterElement.value);
