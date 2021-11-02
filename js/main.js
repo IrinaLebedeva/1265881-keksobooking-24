@@ -23,10 +23,10 @@ const pageInit = () => {
   map.whenReady(() => {
     setAdvertFormActive();
     setMainMarker(setAddress);
-    getData(GET_ADVERTS_DATA_URL, generateCommonMarkers, showGetDataErrorMessage, 'advertCards');
+    getData(GET_ADVERTS_DATA_URL, 'advertCards', generateCommonMarkers, showGetDataErrorMessage);
     advertFormInitialize();
   });
 };
 
 setPageInactive();
-loadLang(getCurrentLang()).finally(pageInit);
+loadLang(getCurrentLang(), pageInit);

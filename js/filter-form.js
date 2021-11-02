@@ -7,7 +7,7 @@ const DEFAULT_TYPE_FILTER_VALUE = 'any';
 const DEFAULT_PRICE_FILTER_VALUE = 'any';
 const DEFAULT_ROOMS_NUMBER_FILTER_VALUE = 'any';
 const DEFAULT_GUESTS_NUMBER_FILTER_VALUE = 'any';
-const PRICE_FILTER_RANGE = {
+const PriceFilterRange = {
   low: {
     from: 0,
     to: 10000,
@@ -42,7 +42,7 @@ const filterByType = (card) => typeFilterElement.value === DEFAULT_TYPE_FILTER_V
   card.offer.type && card.offer.type === typeFilterElement.value;
 
 const filterByPrice = (card) => {
-  const priceCurrentType = PRICE_FILTER_RANGE[priceFilterElement.value];
+  const priceCurrentType = PriceFilterRange[priceFilterElement.value];
   if (priceFilterElement.value === DEFAULT_PRICE_FILTER_VALUE || !priceCurrentType) {
     return true;
   }
@@ -93,11 +93,21 @@ const renderFilteredCommonMarkers = () => {
   setCommonMarkers(filteredAdvertCards, generateCardMarkup);
 };
 
-typeFilterElement.addEventListener('change', debounce(renderFilteredCommonMarkers, RERENDER_DELAY));
-priceFilterElement.addEventListener('change', debounce(renderFilteredCommonMarkers, RERENDER_DELAY));
-roomsNumberFilterElement.addEventListener('change', debounce(renderFilteredCommonMarkers, RERENDER_DELAY));
-guestsNumberFilterElement.addEventListener('change', debounce(renderFilteredCommonMarkers, RERENDER_DELAY));
+const onTypeFilterChange = () => debounce(renderFilteredCommonMarkers, RERENDER_DELAY);
+
+const onPriceFilterChange = () => debounce(renderFilteredCommonMarkers, RERENDER_DELAY);
+
+const onRoomsNumberFilterChange = () => debounce(renderFilteredCommonMarkers, RERENDER_DELAY);
+
+const onGuestsNumberFilterChange = () => debounce(renderFilteredCommonMarkers, RERENDER_DELAY);
+
+const onFeaturesFilterElementClick = () => debounce(renderFilteredCommonMarkers, RERENDER_DELAY);
+
+typeFilterElement.addEventListener('change', onTypeFilterChange());
+priceFilterElement.addEventListener('change', onPriceFilterChange());
+roomsNumberFilterElement.addEventListener('change', onRoomsNumberFilterChange());
+guestsNumberFilterElement.addEventListener('change', onGuestsNumberFilterChange());
 featuresFilterElementList.forEach((element) =>
-  element.addEventListener('click', debounce(renderFilteredCommonMarkers, RERENDER_DELAY)));
+  element.addEventListener('click', onFeaturesFilterElementClick()));
 
 export {resetForm, filterFormInitialize};
