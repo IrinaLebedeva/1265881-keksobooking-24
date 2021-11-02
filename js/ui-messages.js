@@ -1,4 +1,3 @@
-import {isEscapeKey} from './utils/is-escape-key.js';
 import {getMessage, DefaultMessages} from './load-lang.js';
 
 const ERROR_GET_DATA_CLASS_NAME = 'error--get-data';
@@ -9,7 +8,7 @@ const errorFragment = document.querySelector('#error').content.querySelector('.e
 const successFragment = document.querySelector('#success').content.querySelector('.success');
 
 const closeMessage = (evt, selector, onKeyDownHandler) => {
-  if (evt.type === 'keydown' && !isEscapeKey(evt)) {
+  if (evt.type === 'keydown' && evt.key !== 'Escape') {
     return;
   }
 
