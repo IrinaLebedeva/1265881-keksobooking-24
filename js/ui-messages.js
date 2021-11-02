@@ -1,5 +1,5 @@
 import {isEscapeKey} from './utils/is-escape-key.js';
-import {getMessage, DEFAULT_MESSAGES} from './load-lang.js';
+import {getMessage, DefaultMessages} from './load-lang.js';
 
 const ERROR_GET_DATA_CLASS_NAME = 'error--get-data';
 const ERROR_SEND_DATA_CLASS_NAME = 'error--send-data';
@@ -28,7 +28,7 @@ const closeSendDataSuccessMessage = (evt) => closeMessage(evt, `.${SUCCESS_SEND_
 
 const showGetDataErrorMessage = () => {
   const errorNode = errorFragment.cloneNode(true);
-  errorNode.querySelector('.error__message').textContent = getMessage(DEFAULT_MESSAGES.getDataError);
+  errorNode.querySelector('.error__message').textContent = getMessage(DefaultMessages.GET_DATA_ERROR);
   errorNode.querySelector('.error__button').remove();
   errorNode.classList.add(ERROR_GET_DATA_CLASS_NAME);
 

@@ -7,7 +7,7 @@ const DEFAULT_TYPE_FILTER_VALUE = 'any';
 const DEFAULT_PRICE_FILTER_VALUE = 'any';
 const DEFAULT_ROOMS_NUMBER_FILTER_VALUE = 'any';
 const DEFAULT_GUESTS_NUMBER_FILTER_VALUE = 'any';
-const PRICE_FILTER_RANGE = {
+const PriceFilterRange = {
   low: {
     from: 0,
     to: 10000,
@@ -42,7 +42,7 @@ const filterByType = (card) => typeFilterElement.value === DEFAULT_TYPE_FILTER_V
   card.offer.type && card.offer.type === typeFilterElement.value;
 
 const filterByPrice = (card) => {
-  const priceCurrentType = PRICE_FILTER_RANGE[priceFilterElement.value];
+  const priceCurrentType = PriceFilterRange[priceFilterElement.value];
   if (priceFilterElement.value === DEFAULT_PRICE_FILTER_VALUE || !priceCurrentType) {
     return true;
   }

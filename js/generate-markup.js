@@ -1,6 +1,6 @@
 import {hideElement} from './utils/hide-show-element.js';
 
-const OFFER_TYPES = {
+const OfferTypes = {
   flat: 'Квартира',
   bungalow: 'Бунгало',
   house: 'Дом',
@@ -16,7 +16,7 @@ class CardMarkup {
     this.setTextContent('.popup__title', card.offer.title);
     this.setTextContent('.popup__text--address', card.offer.address);
     this.setPrice('.popup__text--price', card.offer.price);
-    this.setTextContent('.popup__type', OFFER_TYPES[card.offer.type]);
+    this.setTextContent('.popup__type', OfferTypes[card.offer.type]);
     this.setTextContent('.popup__text--capacity', this.getCapacityLangString(card.offer.rooms, card.offer.guests));
     this.setTime('.popup__text--time', card.offer.checkin, card.offer.checkout);
     this.setFeatures(card.offer.features);

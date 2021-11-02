@@ -1,15 +1,15 @@
 const ZOOM_LEVEL = 13;
 const DEFAULT_MARKER_COORDINATES = [35.681729, 139.753927];
 const MAX_COMMON_MARKERS_COUNT_ON_MAP = 10;
-const MAIN_ICON = {
-  url: './img/main-pin.svg',
-  size: [52, 52],
-  anchor: [26, 52],
+const MainIcon = {
+  URL: './img/main-pin.svg',
+  SIZE: [52, 52],
+  ANCHOR: [26, 52],
 };
-const COMMON_ICON = {
-  url: './img/pin.svg',
-  size: [40, 40],
-  anchor: [20, 40],
+const CommonIcon = {
+  URL: './img/pin.svg',
+  SIZE: [40, 40],
+  ANCHOR: [20, 40],
 };
 let map = undefined;
 let mainMarker = undefined;
@@ -35,11 +35,11 @@ const mapInitialize = () => {
 };
 
 const getIcon = (isMain = false) => {
-  const currentIcon = isMain ? MAIN_ICON : COMMON_ICON;
+  const currentIcon = isMain ? MainIcon : CommonIcon;
   return L.icon({
-    iconUrl: currentIcon.url,
-    iconSize: currentIcon.size,
-    iconAnchor: currentIcon.anchor,
+    iconUrl: currentIcon.URL,
+    iconSize: currentIcon.SIZE,
+    iconAnchor: currentIcon.ANCHOR,
   });
 };
 

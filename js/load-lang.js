@@ -1,11 +1,11 @@
-const DEFAULT_MESSAGES = {
-  tooShortLength: 'Add another $0 char.',
-  tooLongLength: 'Remove $0 char.',
-  required: 'This field is required',
-  tooBigPriceValue: 'Please 🙏 , cut the price by at least $0! The maximum allowed field value is $1',
-  tooSmallPriceValue: 'The minimum allowed price for the selected type of accommodation 🏠 is $0',
-  numberRequired: 'Please 🙏 , correct the entered value. Only numbers are allowed',
-  getDataError: 'An error occurred while downloading data from the server, but posting ads is working properly. You can add your ad while we restore the data loading service.',
+const DefaultMessages = {
+  TOO_SHORT_LENGTH: 'Add another $0 char.',
+  TOO_LONG_LENGTH: 'Remove $0 char.',
+  REQUIRED: 'This field is required',
+  TOO_BIG_PRICE_VALUE: 'Please 🙏 , cut the price by at least $0! The maximum allowed field value is $1',
+  TOO_SMALL_PRICE_VALUE: 'The minimum allowed price for the selected type of accommodation 🏠 is $0',
+  NUMBER_REQUIRED: 'Please 🙏 , correct the entered value. Only numbers are allowed',
+  GET_DATA_ERROR: 'An error occurred while downloading data from the server, but posting ads is working properly. You can add your ad while we restore the data loading service.',
 };
 
 let messages = {};
@@ -23,4 +23,4 @@ const loadLang = (lang) =>
 
 const getMessage = (key) => messages[key] || key;
 
-export {loadLang, getMessage, DEFAULT_MESSAGES};
+export {loadLang, getMessage, DefaultMessages};

@@ -1,4 +1,4 @@
-const ACCEPTED_FILE_TYPES = [
+const AcceptedFileTypes = [
   'image/apng',
   'image/avif',
   'image/gif',
@@ -21,7 +21,7 @@ const imagesPreviewFragment = document.querySelector('#images-preview').content.
 
 const setPreviewImageElement = (uploadImageElement, previewImageElement) => {
   const file = uploadImageElement.files[0];
-  if (ACCEPTED_FILE_TYPES.includes(file.type)) {
+  if (AcceptedFileTypes.includes(file.type)) {
     previewImageElement.src = URL.createObjectURL(file);
   }
 };
