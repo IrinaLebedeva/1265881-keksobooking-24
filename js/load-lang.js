@@ -1,3 +1,5 @@
+import {getData} from './api-methods.js';
+
 const DefaultMessages = {
   TOO_SHORT_LENGTH: 'Add another $0 char.',
   TOO_LONG_LENGTH: 'Remove $0 char.',
@@ -10,16 +12,15 @@ const DefaultMessages = {
 
 let messages = {};
 
-const loadLang = (lang) =>
-  fetch(`./js/translations/${lang}.lang.json`).then((response) => {
-    if (!response.ok) {
-      throw new Error(`An error occurred while loading ${response.url}. Failed with status: ${response.status}, statusText: ${response.statusText}`);
-    } else {
-      return response.json();
-    }
-  }).then((json) => {
+const loadLang = (lang, onFinal) => getData(
+  `./js/translations/${lang}.lang.json`,
+  'loadLang',
+  (json) => {
     messages = json;
-  });
+  },
+  () => {
+  },
+  onFinal);
 
 const getMessage = (key) => messages[key] || key;
 

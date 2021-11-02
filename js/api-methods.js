@@ -7,7 +7,7 @@ class FetchError extends Error {
 
 const getDataCache = {};
 
-const getData = (url, onSuccess, onError, cacheKey) => {
+const getData = (url, cacheKey, onSuccess, onError, onFinal) => {
   if (getDataCache[cacheKey]) {
     onSuccess(getDataCache[cacheKey]);
     return;
@@ -23,7 +23,8 @@ const getData = (url, onSuccess, onError, cacheKey) => {
       getDataCache[cacheKey] = data;
       onSuccess(getDataCache[cacheKey]);
     }).
-    catch(onError);
+    catch(onError).
+    finally(onFinal);
 };
 
 const sendData = (url, data, onSuccess, onError, onFinal) => {
