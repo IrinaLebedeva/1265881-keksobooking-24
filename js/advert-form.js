@@ -12,7 +12,7 @@ import {setAvatarElementChange, setImagesElementChange, clearPreviewImages} from
 const TITLE_MIN_LENGTH = 30;
 const TITLE_MAX_LENGTH = 100;
 const PRICE_MAX_VALUE = 1000000;
-const MinPriceByTypes = {
+const minPriceByTypes = {
   palace: 10000,
   flat: 1000,
   house: 5000,
@@ -43,8 +43,8 @@ const setAddress = (coordinates) => {
 
 const setPriceMinAttribute = () => {
   const currentType = typeElement.value;
-  priceElement.min = MinPriceByTypes[currentType];
-  priceElement.placeholder = MinPriceByTypes[currentType];
+  priceElement.min = minPriceByTypes[currentType];
+  priceElement.placeholder = minPriceByTypes[currentType];
 };
 
 const setAvailableCapacity = () => {

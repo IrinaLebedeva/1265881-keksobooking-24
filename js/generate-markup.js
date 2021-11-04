@@ -84,13 +84,11 @@ class CardMarkup {
     }
 
     const cardPhotosTemplate = this.cardFragment.querySelector('.popup__photos');
-    const photosContainerFragment = document.createDocumentFragment();
     photos.forEach((photo) => {
       const photoTemplate = cardPhotosTemplate.querySelector('.popup__photo').cloneNode(true);
       photoTemplate.src = photo;
-      photosContainerFragment.appendChild(photoTemplate);
+      photosContainer.appendChild(photoTemplate);
     });
-    photosContainer.appendChild(photosContainerFragment);
   }
 
   getCapacityRoomsLangString(rooms) {
