@@ -21,7 +21,7 @@ class CardMarkup {
     this.setTime('.popup__text--time', card.offer.checkin, card.offer.checkout);
     this.setFeatures(card.offer.features);
     this.setTextContent('.popup__description', card.offer.description);
-    this.setPhotos(this.getNotEmptyPhotos(card.offer.photos));
+    this.setPhotos(card.offer.photos);
     this.setImageSrc('.popup__avatar', card.author.avatar);
   }
 
@@ -60,7 +60,7 @@ class CardMarkup {
   setFeatures(features) {
     const featureListContainerElement = this.node.querySelector('.popup__features');
 
-    if (!features) {
+    if (!features || !features.length) {
       featureListContainerElement.innerHTML = '';
       hideElement(featureListContainerElement);
       return;
@@ -75,18 +75,10 @@ class CardMarkup {
     }
   }
 
-  getNotEmptyPhotos(photos) {
-    if (!photos) {
-      return [];
-    }
-    const notEmptyPhotos = photos.filter((photo) => photo.length);
-    return notEmptyPhotos.length ? notEmptyPhotos : [];
-  }
-
   setPhotos(photos) {
     const photosContainer = this.node.querySelector('.popup__photos');
     photosContainer.innerHTML = '';
-    if (!photos.length) {
+    if (!photos || !photos.length) {
       hideElement(photosContainer);
       return;
     }
