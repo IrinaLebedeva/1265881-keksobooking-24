@@ -48,4 +48,8 @@ const clearPreviewImages = () => {
   imagesPreviewContainerElement.textContent = '';
 };
 
-export {setAvatarElementChange, setImagesElementChange, clearPreviewImages};
+export {
+  setAvatarElementChange,
+  setImagesElementChange,
+  clearPreviewImages
+};

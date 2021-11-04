@@ -33,4 +33,9 @@ const setPageActive = () => {
   setMapFiltersFormActive();
 };
 
-export {setPageInactive, setPageActive, setAdvertFormActive, setMapFiltersFormActive};
+export {
+  setPageInactive,
+  setPageActive,
+  setAdvertFormActive,
+  setMapFiltersFormActive
+};

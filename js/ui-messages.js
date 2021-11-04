@@ -74,4 +74,8 @@ const showSendDataSuccessMessage = () => {
   document.addEventListener('keydown', onDocumentSendDataSuccessKeydown);
 };
 
-export {showGetDataErrorMessage, showSendDataErrorMessage, showSendDataSuccessMessage};
+export {
+  showGetDataErrorMessage,
+  showSendDataErrorMessage,
+  showSendDataSuccessMessage
+};

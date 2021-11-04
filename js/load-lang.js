@@ -24,4 +24,8 @@ const loadLang = (lang, onFinal) => getData(
 
 const getMessage = (key) => messages[key] || key;
 
-export {loadLang, getMessage, DefaultMessages};
+export {
+  loadLang,
+  getMessage,
+  DefaultMessages
+};

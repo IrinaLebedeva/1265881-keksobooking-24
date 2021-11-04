@@ -72,4 +72,13 @@ const resetMainMarker = (callback) => {
 
 const mapClosePopup = () => map.closePopup();
 
-export {mapInitialize, setMainMarker, setCommonMarkers, resetMainMarker, mapClosePopup, setMapDefaultView, removeMapMarkersList, MAX_COMMON_MARKERS_COUNT_ON_MAP};
+export {
+  mapInitialize,
+  setMainMarker,
+  setCommonMarkers,
+  resetMainMarker,
+  mapClosePopup,
+  setMapDefaultView,
+  removeMapMarkersList,
+  MAX_COMMON_MARKERS_COUNT_ON_MAP
+};
