@@ -5,7 +5,7 @@ import {showSendDataErrorMessage, showSendDataSuccessMessage} from './ui-message
 import {sendData} from './api-methods.js';
 import {setPageInactive, setPageActive} from './set-page-state.js';
 import {resetMainMarker, setMapDefaultView} from './map.js';
-import {resetForm as resetFilterForm} from './filter-form.js';
+import {resetFilterForm} from './filter-form.js';
 import {mapClosePopup} from './map.js';
 import {setAvatarElementChange, setImagesElementChange, clearPreviewImages} from './preview-advert-form-images.js';
 
@@ -136,7 +136,7 @@ const onTimeInChange = () => syncTimeOutField();
 
 const onTimeOutChange = () => syncTimeInField();
 
-const advertFormInitialize = () => {
+const initializeAdvertForm = () => {
   setAvailableCapacity();
   setPriceMinAttribute();
 
@@ -196,4 +196,4 @@ resetButtonElement.addEventListener('click', (evt) => {
   resetForm();
 });
 
-export {advertFormInitialize, setAddress};
+export {initializeAdvertForm, setAddress};

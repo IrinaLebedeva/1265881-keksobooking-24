@@ -23,7 +23,7 @@ const removeMapMarkersList = () => {
   commonMarkers.forEach((marker) => marker.remove());
 };
 
-const mapInitialize = () => {
+const initializeMap = () => {
   map = L.map('map-canvas');
   setMapDefaultView();
 
@@ -73,7 +73,7 @@ const resetMainMarker = (callback) => {
 const mapClosePopup = () => map.closePopup();
 
 export {
-  mapInitialize,
+  initializeMap,
   setMainMarker,
   setCommonMarkers,
   resetMainMarker,

@@ -30,11 +30,11 @@ const featuresFilterElementList = formElement.querySelectorAll('input[name="feat
 
 let advertCards = {};
 
-const resetForm = () => {
+const resetFilterForm = () => {
   formElement.reset();
 };
 
-const filterFormInitialize = (cards) => {
+const initializeFilterForm = (cards) => {
   advertCards = cards;
 };
 
@@ -110,4 +110,4 @@ guestsNumberFilterElement.addEventListener('change', onGuestsNumberFilterChange(
 featuresFilterElementList.forEach((element) =>
   element.addEventListener('click', onFeaturesFilterElementClick()));
 
-export {resetForm, filterFormInitialize};
+export {resetFilterForm, initializeFilterForm};
