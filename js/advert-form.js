@@ -53,8 +53,8 @@ const setAvailableCapacity = () => {
   const currentRoomsNumber = roomsNumberElement.value;
   const capacityOptionsList = capacityElement.options;
   const maxAvailableValue = [...capacityOptionsList].reduce((maxAvailableSelectedValue, option) => {
-    option.removeAttribute('selected');
-    option.removeAttribute('disabled');
+    option.selected = false;
+    option.disabled = false;
 
     if (AvailableCapacityByRooms[currentRoomsNumber].some((roomsValue) => roomsValue === option.value)) {
       if (Number(maxAvailableSelectedValue) < Number(option.value)) {
@@ -62,7 +62,7 @@ const setAvailableCapacity = () => {
       }
       showElement(option);
     } else {
-      option.setAttribute('disabled', 'disabled');
+      option.disabled = true;
       hideElement(option);
     }
     return maxAvailableSelectedValue;
@@ -193,7 +193,7 @@ formElement.addEventListener('submit', (evt) => {
     const formData = new FormData(formElement);
     setPageInactive();
     sendData(
-      formElement.getAttribute('action'),
+      formElement.action,
       formData,
       onSuccessFormSubmit,
       onErrorFormSubmit,
