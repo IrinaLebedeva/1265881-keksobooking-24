@@ -1,4 +1,5 @@
 import {hideElement} from './utils/hide-show-element.js';
+import {getNounCaseByNumber, getNounWithPrepositionCaseByNumber} from './utils/get-noun-case.js';
 
 const OfferTypes = {
   flat: 'Квартира',
@@ -95,21 +96,16 @@ class CardMarkup {
     if (!rooms) {
       return '';
     }
-    let langString = `${rooms} комнат`;
-    if (rooms < 2) {
-      langString = `${rooms} комната`;
-    } else if (rooms < 5) {
-      langString = `${rooms} комнаты`;
-    }
-    return langString;
+    const nounDeclension = getNounCaseByNumber(rooms, 'комната', 'комнаты', 'комнат');
+    return `${rooms} ${nounDeclension}`;
   }
 
   getCapacityGuestsLangString(guests) {
-    if (guests) {
-      return guests === 1 ? `для ${guests} гостя` : `для ${guests} гостей`;
-    } else {
+    if (!guests) {
       return '';
     }
+    const nounDeclension = getNounWithPrepositionCaseByNumber(guests, 'гостя', 'гостей');
+    return `для ${guests} ${nounDeclension}`;
   }
 
   getCapacityLangString(rooms, guests) {
