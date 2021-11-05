@@ -19,7 +19,7 @@ const setMapDefaultView = () => {
   map.setView(DEFAULT_MARKER_COORDINATES, ZOOM_LEVEL);
 };
 
-const removeMapMarkersList = () => {
+const removeCommonMarkers = () => {
   commonMarkers.forEach((marker) => marker.remove());
 };
 
@@ -60,7 +60,7 @@ const setCommonMarkers = (advertCards, callback) => {
 const setMainMarker = (callback) => {
   mainMarker = addMainMarker(map);
   callback(mainMarker.getLatLng());
-  mainMarker.on('moveend', () => {
+  mainMarker.on('move', () => {
     callback(mainMarker.getLatLng());
   });
 };
@@ -70,15 +70,12 @@ const resetMainMarker = (callback) => {
   callback(mainMarker.getLatLng());
 };
 
-const mapClosePopup = () => map.closePopup();
-
 export {
   initializeMap,
   setMainMarker,
   setCommonMarkers,
   resetMainMarker,
-  mapClosePopup,
   setMapDefaultView,
-  removeMapMarkersList,
+  removeCommonMarkers,
   MAX_COMMON_MARKERS_COUNT_ON_MAP
 };

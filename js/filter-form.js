@@ -1,4 +1,4 @@
-import {removeMapMarkersList, MAX_COMMON_MARKERS_COUNT_ON_MAP, setCommonMarkers} from './map.js';
+import {removeCommonMarkers, MAX_COMMON_MARKERS_COUNT_ON_MAP, setCommonMarkers} from './map.js';
 import {generateCardMarkup} from './generate-markup.js';
 import {debounce} from './utils/debounce.js';
 
@@ -74,7 +74,7 @@ const filterByFeatures = (card) => {
 };
 
 const renderFilteredCommonMarkers = () => {
-  removeMapMarkersList();
+  removeCommonMarkers();
 
   const filteredAdvertCards = [];
   for (const card of advertCards) {
@@ -110,4 +110,8 @@ guestsNumberFilterElement.addEventListener('change', onGuestsNumberFilterChange(
 featuresFilterElementList.forEach((element) =>
   element.addEventListener('click', onFeaturesFilterElementClick()));
 
-export {resetFilterForm, initializeFilterForm};
+export {
+  resetFilterForm,
+  initializeFilterForm,
+  renderFilteredCommonMarkers
+};

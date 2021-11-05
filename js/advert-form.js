@@ -5,13 +5,13 @@ import {showSendDataErrorMessage, showSendDataSuccessMessage} from './ui-message
 import {sendData} from './api-methods.js';
 import {setPageInactive, setPageActive} from './set-page-state.js';
 import {resetMainMarker, setMapDefaultView} from './map.js';
-import {resetFilterForm} from './filter-form.js';
-import {mapClosePopup} from './map.js';
+import {resetFilterForm, renderFilteredCommonMarkers} from './filter-form.js';
 import {setAvatarElementChange, setImagesElementChange, clearPreviewImages} from './preview-advert-form-images.js';
 
 const TITLE_MIN_LENGTH = 30;
 const TITLE_MAX_LENGTH = 100;
 const PRICE_MAX_VALUE = 1000000;
+const COORDINATES_FRACTION_DIGITS = 5;
 const minPriceByTypes = {
   palace: 10000,
   flat: 1000,
@@ -38,7 +38,9 @@ const timeOutElement = formElement.querySelector('select[name="timeout"]');
 const resetButtonElement = formElement.querySelector('.ad-form__reset');
 
 const setAddress = (coordinates) => {
-  addressElement.value = `${coordinates.lat}, ${coordinates.lng}`;
+  const lat = Number(coordinates.lat).toFixed(COORDINATES_FRACTION_DIGITS);
+  const lng = Number(coordinates.lng).toFixed(COORDINATES_FRACTION_DIGITS);
+  addressElement.value = `${lat}, ${lng}`;
 };
 
 const setPriceMinAttribute = () => {
@@ -154,19 +156,27 @@ const initializeAdvertForm = () => {
   setImagesElementChange();
 };
 
-const resetForm = () => {
+const resetAdvertForm = () => {
   formElement.reset();
   setPriceMinAttribute();
   setAvailableCapacity();
-  resetMainMarker(setAddress);
   clearPreviewImages();
+  resetMainMarker(setAddress);
+};
+
+const resetMapForm = () => {
+  resetFilterForm();
+  renderFilteredCommonMarkers();
+  setMapDefaultView();
+};
+
+const resetForms = () => {
+  resetAdvertForm();
+  resetMapForm();
 };
 
 const onSuccessFormSubmit = () => {
-  resetForm();
-  resetFilterForm();
-  mapClosePopup();
-  setMapDefaultView();
+  resetForms();
   showSendDataSuccessMessage();
 };
 
@@ -193,7 +203,7 @@ formElement.addEventListener('submit', (evt) => {
 
 resetButtonElement.addEventListener('click', (evt) => {
   evt.preventDefault();
-  resetForm();
+  resetForms();
 });
 
 export {initializeAdvertForm, setAddress};
