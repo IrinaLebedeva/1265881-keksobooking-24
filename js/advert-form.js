@@ -19,7 +19,7 @@ const minPriceByTypes = {
   bungalow: 0,
   hotel: 3000,
 };
-const AvailableCapacityByRooms = {
+const availableCapacityByRooms = {
   1: ['1'],
   2: ['1', '2'],
   3: ['1', '2', '3'],
@@ -56,7 +56,7 @@ const setAvailableCapacity = () => {
     option.selected = false;
     option.disabled = false;
 
-    if (AvailableCapacityByRooms[currentRoomsNumber].some((roomsValue) => roomsValue === option.value)) {
+    if (availableCapacityByRooms[currentRoomsNumber].some((roomsValue) => roomsValue === option.value)) {
       if (Number(maxAvailableSelectedValue) < Number(option.value)) {
         maxAvailableSelectedValue = option.value;
       }
