@@ -19,11 +19,25 @@ const closeMessage = (evt, selector, onKeyDownHandler) => {
   }
 };
 
-const getDataErrorHandler = (evt) => closeMessage(evt, `.${ERROR_GET_DATA_CLASS_NAME}`, getDataErrorHandler);
+const closeGetDataErrorMessage = (evt, onKeyDownHandler) => closeMessage(evt, `.${ERROR_GET_DATA_CLASS_NAME}`, onKeyDownHandler);
 
-const sendDataErrorHandler = (evt) => closeMessage(evt, `.${ERROR_SEND_DATA_CLASS_NAME}`, sendDataErrorHandler);
+const closeSendDataErrorMessage = (evt, onKeyDownHandler) => closeMessage(evt, `.${ERROR_SEND_DATA_CLASS_NAME}`, onKeyDownHandler);
 
-const sendDataSuccessHandler = (evt) => closeMessage(evt, `.${SUCCESS_SEND_DATA_CLASS_NAME}`, sendDataSuccessHandler);
+const closeSendDataSuccessMessage = (evt, onKeyDownHandler) => closeMessage(evt, `.${SUCCESS_SEND_DATA_CLASS_NAME}`, onKeyDownHandler);
+
+const onDocumentGetDataErrorKeydown = (evt) => closeGetDataErrorMessage(evt, onDocumentGetDataErrorKeydown);
+
+const onGetDataErrorClick = (evt) => closeGetDataErrorMessage(evt, onDocumentGetDataErrorKeydown);
+
+const onDocumentSendDataErrorKeydown = (evt) => closeSendDataErrorMessage(evt, onDocumentSendDataErrorKeydown);
+
+const onSendDataErrorButtonClick = (evt) => closeSendDataErrorMessage(evt, onDocumentSendDataErrorKeydown);
+
+const onSendDataErrorClick = (evt) => closeSendDataErrorMessage(evt, onDocumentSendDataErrorKeydown);
+
+const onDocumentSendDataSuccessKeydown = (evt) => closeSendDataSuccessMessage(evt, onDocumentSendDataSuccessKeydown);
+
+const onSendDataSuccessClick = (evt) => closeSendDataSuccessMessage(evt, onDocumentSendDataSuccessKeydown);
 
 const showGetDataErrorMessage = () => {
   const errorNode = errorFragment.cloneNode(true);
@@ -33,8 +47,8 @@ const showGetDataErrorMessage = () => {
 
   const errorElement = bodyElement.appendChild(errorNode);
 
-  errorElement.addEventListener('click', getDataErrorHandler);
-  document.addEventListener('keydown', getDataErrorHandler);
+  errorElement.addEventListener('click', onGetDataErrorClick);
+  document.addEventListener('keydown', onDocumentGetDataErrorKeydown);
 };
 
 const showSendDataErrorMessage = () => {
@@ -45,9 +59,9 @@ const showSendDataErrorMessage = () => {
 
   const errorElement = bodyElement.appendChild(errorNode);
 
-  errorButton.addEventListener('click', sendDataErrorHandler);
-  errorElement.addEventListener('click', sendDataErrorHandler);
-  document.addEventListener('keydown', sendDataErrorHandler);
+  errorButton.addEventListener('click', onSendDataErrorButtonClick);
+  errorElement.addEventListener('click', onSendDataErrorClick);
+  document.addEventListener('keydown', onDocumentSendDataErrorKeydown);
 };
 
 const showSendDataSuccessMessage = () => {
@@ -56,8 +70,8 @@ const showSendDataSuccessMessage = () => {
 
   const successElement = bodyElement.appendChild(successNode);
 
-  successElement.addEventListener('click', sendDataSuccessHandler);
-  document.addEventListener('keydown', sendDataSuccessHandler);
+  successElement.addEventListener('click', onSendDataSuccessClick);
+  document.addEventListener('keydown', onDocumentSendDataSuccessKeydown);
 };
 
 export {
