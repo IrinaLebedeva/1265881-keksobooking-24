@@ -1,5 +1,5 @@
 import {hideElement} from './utils/hide-show-element.js';
-import {getNounCaseByNumber, getNounWithPrepositionCaseByNumber} from './utils/get-noun-case.js';
+import {pluralize} from './utils/pluralize.js';
 
 const OfferTypes = {
   flat: 'Квартира',
@@ -96,16 +96,16 @@ class CardMarkup {
     if (!rooms) {
       return '';
     }
-    const nounDeclension = getNounCaseByNumber(rooms, 'комната', 'комнаты', 'комнат');
-    return `${rooms} ${nounDeclension}`;
+    const pluralizedNoun = pluralize(rooms, 'комната', 'комнаты', 'комнат');
+    return `${rooms} ${pluralizedNoun}`;
   }
 
   getCapacityGuestsLangString(guests) {
     if (!guests) {
       return '';
     }
-    const nounDeclension = getNounWithPrepositionCaseByNumber(guests, 'гостя', 'гостей');
-    return `для ${guests} ${nounDeclension}`;
+    const pluralizedNoun = pluralize(guests, 'гостя', 'гостей', 'гостей');
+    return `для ${guests} ${pluralizedNoun}`;
   }
 
   getCapacityLangString(rooms, guests) {
